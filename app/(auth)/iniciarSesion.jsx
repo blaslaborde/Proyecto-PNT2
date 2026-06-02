@@ -7,6 +7,12 @@ const MOCK_USER = [{
   name: "Blas",
   email: "blas@gmail.com",
   password: "123"
+},
+{
+  id: 2,
+  name: "Fernando",
+  email: "fernando@gmail.com",
+  password: "123"
 }]
 
 export default function iniciarSesion() {
