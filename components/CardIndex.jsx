@@ -9,7 +9,7 @@ export const CardIndex = () => {
 const logo = require('../assets/LogoMinimalista.png')
 
 const irALogin = ()=> {
-        router.push("/(auth)/iniciarSesion")   
+        router.replace("/(auth)/iniciarSesion")   
     }  
   
   return (

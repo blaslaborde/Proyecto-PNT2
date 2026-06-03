@@ -2,14 +2,17 @@ import React, { useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
+import { useAuth } from '../../context/AuthContext'
 
 
 
 export default function iniciarSesion() {
- const router = useRouter()
+  const router = useRouter()
+
   const [email, setEmail] = useState("")
-const [password, setPassword] = useState("")
-const [error, setError] = useState("")
+  const [password, setPassword] = useState("")
+
+  const {user,error,login,logOut} = useAuth()
 
 
 
@@ -59,7 +62,7 @@ const handelRegistrarse = () =>{
 
     {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-    <TouchableOpacity style={styles.btnPrimary} onPress={handelLogin}>
+    <TouchableOpacity style={styles.btnPrimary} onPress={() => login(email,password)}>
       <Text style={styles.btnText}>Ingresar</Text>
     </TouchableOpacity>
 

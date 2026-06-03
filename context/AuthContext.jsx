@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { useRouter } from "expo-router";
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext()
 
@@ -15,10 +16,14 @@ const MOCK_USER = [{
   password: "123"
 }]
 
-export function AuthProvider({children}){
-    const [user, setUser] = useState(null)
+export const useAuth = () => useContext(AuthContext)
 
-    const login = () => {
+export function AuthProvider({children}){
+     const router = useRouter()
+    const [user, setUser] = useState(null)
+    const [error, setError] = useState(null)
+
+    const login = (email, password) => {
         if (!email && !password){
         setError("Faltan Datos")
         return
@@ -32,16 +37,20 @@ export function AuthProvider({children}){
             return
         }
 
+
         console.log("SESION INICIADA CON EXITO")
+        router.replace("/(tabs)/home")
+        setUser(data)
         setError("")
     } 
  
     const logOut = () => {
-
+        setUser(null)
+        router.replace("/(auth)/iniciarSesion")
   }
 
     return(
-        <AuthContext.Provider value={user,login}>
+        <AuthContext.Provider value={{user,login,logOut,error}}>
             {children}
         </AuthContext.Provider>
     )
