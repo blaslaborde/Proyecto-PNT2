@@ -3,6 +3,6 @@ import { Text } from 'react-native'
 
 export default function registrarse () {
   return (
-    <Text>registrarse</Text>
+    <Text>Registrarse</Text>
   )
 }

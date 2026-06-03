@@ -1,41 +1,20 @@
 import React, { useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { useRouter } from 'expo-router'
 
-const MOCK_USER = [{
-  id: 1,
-  name: "Blas",
-  email: "blas@gmail.com",
-  password: "123"
-},
-{
-  id: 2,
-  name: "Fernando",
-  email: "fernando@gmail.com",
-  password: "123"
-}]
+
 
 export default function iniciarSesion() {
+ const router = useRouter()
   const [email, setEmail] = useState("")
 const [password, setPassword] = useState("")
 const [error, setError] = useState("")
 
-const handelLogin = () => {
-  if (!email && !password){
-    setError("Faltan Datos")
-    return
-  } 
-  const data = MOCK_USER.find((usuario) => {
-  return usuario.email === email && usuario.password === password
-  })
 
-if(!data){
-  setError("Usuario o Password incorrectas")
-  return
-}
 
-console.log("SESION INICIADA CON EXITO")
-setError("")
+const handelRegistrarse = () =>{
+    router.replace("/(auth)/registrarse")
 }
 
  return (
@@ -86,7 +65,7 @@ setError("")
 
     <View style={styles.footerRow}>
       <Text style={styles.footerText}>¿No tenés cuenta? </Text>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handelRegistrarse}>
         <Text style={styles.footerLink}>Registrate acá</Text>
       </TouchableOpacity>
     </View>
