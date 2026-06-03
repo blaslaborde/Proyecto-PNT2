@@ -16,7 +16,7 @@ export default function iniciarSesion() {
 
 
 
-const handelRegistrarse = () =>{
+const handleRegistrarse = () =>{
     router.replace("/(auth)/registrarse")
 }
 
@@ -62,13 +62,13 @@ const handelRegistrarse = () =>{
 
     {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-    <TouchableOpacity style={styles.btnPrimary} onPress={() => login(email,password)}>
+    <TouchableOpacity>
       <Text style={styles.btnText}>Ingresar</Text>
     </TouchableOpacity>
 
     <View style={styles.footerRow}>
       <Text style={styles.footerText}>¿No tenés cuenta? </Text>
-      <TouchableOpacity onPress={handelRegistrarse}>
+      <TouchableOpacity onPress={handleRegistrarse}>
         <Text style={styles.footerLink}>Registrate acá</Text>
       </TouchableOpacity>
     </View>
