@@ -3,13 +3,13 @@ import { View,Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { useRouter } from 'expo-router'
 
 
-export const Card = () => {
+export const CardIndex = () => {
   const router = useRouter()
 
 const logo = require('../assets/LogoMinimalista.png')
 
 const irALogin = ()=> {
-        router.push("/iniciarSesion")   
+        router.push("/(auth)/iniciarSesion")   
     }  
   
   return (

@@ -4,8 +4,9 @@ import React from 'react'
 
 export default function RootLayout() {
   return (
-    <Stack>
-        <Stack.Screen name='iniciarsesion'/>
+    <Stack screenOptions={{ headerShown: false }} >
+        <Stack.Screen name='iniciarSesion'/>
+        <Stack.Screen name='registrarse'/>
     </Stack>
   )
 }
