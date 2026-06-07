@@ -1,28 +1,36 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useAuth } from '../../context/AuthContext'
+import { useRouter } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function home() {
-    const {user,logOut} = useAuth()
+  const router = useRouter()
+  const {user} = useAuth()
+
+    if (!user) return null;
+
+  const irAPerfil = () =>{
+      router.push("/(tabs)/profile")
+  }
+
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#121212' }}>
     <View style={styles.container}>
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>¡Hola, {user.name}! 👋</Text>
-          <Text style={styles.subtitle}>¿Qué vas a comer hoy?</Text>
+          <Text style={styles.subtitle}>¿A donde vas a ir hoy?</Text>
         </View>
-        <TouchableOpacity style={styles.avatarBtn}>
+        <TouchableOpacity onPress={irAPerfil} style={styles.avatarBtn}>
           <Text style={styles.avatarText}>
             {user.name?.charAt(0).toUpperCase()}
           </Text>
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity style={styles.btnLogout} onPress={logOut}>
-        <Text style={styles.btnLogoutText}>Cerrar sesión</Text>
-      </TouchableOpacity>
     </View>
+    </SafeAreaView>
   )
 }
 

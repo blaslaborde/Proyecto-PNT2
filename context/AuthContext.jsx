@@ -19,9 +19,11 @@ const MOCK_USER = [{
 export const useAuth = () => useContext(AuthContext)
 
 export function AuthProvider({children}){
-     const router = useRouter()
+    const router = useRouter()
     const [user, setUser] = useState(null)
     const [error, setError] = useState(null)
+
+   
 
     const login = (email, password) => {
         if (!email && !password){

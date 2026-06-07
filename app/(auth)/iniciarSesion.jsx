@@ -3,7 +3,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useAuth } from '../../context/AuthContext'
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function iniciarSesion() {
@@ -21,6 +21,7 @@ const handleRegistrarse = () =>{
 }
 
  return (
+  <SafeAreaView style={{ flex: 1, backgroundColor: '#121212' }}>
   <View style={styles.container}>
     
     <View style={styles.logoArea}>
@@ -62,7 +63,7 @@ const handleRegistrarse = () =>{
 
     {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => login(email,password)} style={styles.btnPrimary}>
       <Text style={styles.btnText}>Ingresar</Text>
     </TouchableOpacity>
 
@@ -73,6 +74,7 @@ const handleRegistrarse = () =>{
       </TouchableOpacity>
     </View>
   </View>
+  </SafeAreaView>
 )}
 
 const styles = StyleSheet.create({

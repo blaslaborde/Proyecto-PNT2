@@ -1,13 +1,8 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
-import {
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  StyleSheet
-} from 'react-native'
+import {Text,TextInput,TouchableOpacity,View,StyleSheet} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function registrarse () {
  const [nombre, setNombre] = useState("")
@@ -30,11 +25,13 @@ const handleRegistro = () => {
 
     setError("")
     console.log("USUARIO REGISTRADO")
+
     
 }
 
 
 return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#121212' }}>
     <View style={styles.container}>
 
       <Text style={styles.title}>Crear cuenta</Text>
@@ -88,7 +85,7 @@ return (
 
       <TouchableOpacity
   style={styles.btnSecondary}
-  onPress={() => router.push("/(auth)/iniciarSesion")}
+  onPress={() => router.replace("/(auth)/iniciarSesion")}
 >
   <Text style={styles.btnSecondaryText}>
     Volver al login
@@ -96,6 +93,7 @@ return (
 </TouchableOpacity>
 
     </View>
+    </SafeAreaView>
   )
 }
 
