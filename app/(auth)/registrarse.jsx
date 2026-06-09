@@ -3,6 +3,7 @@ import { router } from 'expo-router'
 import React, { useState } from 'react'
 import {Text,TextInput,TouchableOpacity,View,StyleSheet} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuth } from '../../context/AuthContext';
 
 export default function registrarse () {
  const [nombre, setNombre] = useState("")
@@ -10,25 +11,7 @@ export default function registrarse () {
  const [password, setPassword] = useState("")
  const [confirmPassword, setConfirmPassword] = useState("")
  const [error, setError] = useState("")
-
-const handleRegistro = () => {
-
-    if(!nombre || !email || !password || !confirmPassword){
-        setError("Completa todos los campos")
-        return
-    }
-
-    if(password != confirmPassword){
-        setError("Las contraseñas no coinciden")
-        return
-    }
-
-    setError("")
-    console.log("USUARIO REGISTRADO")
-
-    
-}
-
+ const {registro} = useAuth()
 
 return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#121212' }}>
@@ -78,15 +61,12 @@ return (
 
       <TouchableOpacity
         style={styles.button}
-        onPress={handleRegistro}
+        onPress={() => {registro(nombre,email,password,confirmPassword)}}
       >
         <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-  style={styles.btnSecondary}
-  onPress={() => router.replace("/(auth)/iniciarSesion")}
->
+      <TouchableOpacity style={styles.btnSecondary} onPress={() => router.replace("/(auth)/iniciarSesion")}>
   <Text style={styles.btnSecondaryText}>
     Volver al login
   </Text>

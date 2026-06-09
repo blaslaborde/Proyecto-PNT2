@@ -23,7 +23,27 @@ export function AuthProvider({children}){
     const [user, setUser] = useState(null)
     const [error, setError] = useState(null)
 
-   
+   const registro = (nombre,email,password,confirmPassword) => {
+
+    if(!nombre || !email || !password || !confirmPassword){
+        setError("Completa todos los campos")
+        return
+    }
+
+    if(password != confirmPassword){
+        setError("Las contraseñas no coinciden")
+        return
+    }
+
+    const usuario = {id: MOCK_USER.length++, name: nombre, email: email, password: password}
+    MOCK_USER.push(usuario)
+
+    console.log("USUARIO REGISTRADO")
+    router.replace("/(tabs)/home")
+    setUser(usuario)
+    setError("")
+    
+}
 
     const login = (email, password) => {
         if (!email && !password){
@@ -52,7 +72,7 @@ export function AuthProvider({children}){
   }
 
     return(
-        <AuthContext.Provider value={{user,login,logOut,error}}>
+        <AuthContext.Provider value={{user,login,logOut,registro,error}}>
             {children}
         </AuthContext.Provider>
     )
