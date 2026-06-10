@@ -3,19 +3,6 @@ import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext()
 
-const MOCK_USER = [{
-  id: 1,
-  name: "Blas",
-  email: "blas@gmail.com",
-  password: "123"
-},
-{
-  id: 2,
-  name: "Fernando",
-  email: "fernando@gmail.com",
-  password: "123"
-}]
-
 export const useAuth = () => useContext(AuthContext)
 
 export function AuthProvider({children}){
@@ -23,7 +10,7 @@ export function AuthProvider({children}){
     const [user, setUser] = useState(null)
     const [error, setError] = useState(null)
 
-   const registro = (nombre,email,password,confirmPassword) => {
+const registro = async (nombre,email,lastName,telefono,password,confirmPassword) => {
 
     if(!nombre || !email || !password || !confirmPassword){
         setError("Completa todos los campos")
@@ -34,27 +21,43 @@ export function AuthProvider({children}){
         setError("Las contraseñas no coinciden")
         return
     }
-
-    const usuario = {id: MOCK_USER.length++, name: nombre, email: email, password: password}
-    MOCK_USER.push(usuario)
-
-    console.log("USUARIO REGISTRADO")
-    router.replace("/(tabs)/home")
-    setUser(usuario)
-    setError("")
-    
+    try {
+        const response = await fetch("https://6a161d251b90031f81b0b0c9.mockapi.io/users", {
+            method: "POST",                                    
+            headers: { "Content-Type": "application/json" },  
+            body: JSON.stringify({                             
+                name: nombre,
+                lastName: lastName,
+                telefono: telefono,
+                email: email,
+                password: password
+            })
+        })
+        const nuevoUsuario = await response.json() // MockAPI te devuelve el usuario con su ID
+        console.log("USUARIO REGISTRADO", nuevoUsuario)
+        setUser(nuevoUsuario)
+        setError("")
+        router.replace("/(tabs)/home")
+    } catch (e) {
+        setError("Error al registrarse")
+    }
 }
 
-    const login = (email, password) => {
+    const login = async (email, password) => {
+        
         if (!email && !password){
         setError("Faltan Datos")
         return
         }
-        const data = MOCK_USER.find((usuario) => {
+
+        const response = await fetch("https://6a161d251b90031f81b0b0c9.mockapi.io/users")
+        const data = await response.json()
+
+        const buscar = data.find((usuario) => {
             return usuario.email === email && usuario.password === password
         })
 
-        if (!data) {
+        if (!buscar) {
             setError("Usuario o Password incorrectas")
             return
         }
@@ -62,7 +65,7 @@ export function AuthProvider({children}){
 
         console.log("SESION INICIADA CON EXITO")
         router.replace("/(tabs)/home")
-        setUser(data)
+        setUser(buscar)
         setError("")
     } 
  

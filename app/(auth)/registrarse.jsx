@@ -8,6 +8,8 @@ import { useAuth } from '../../context/AuthContext';
 export default function registrarse () {
  const [nombre, setNombre] = useState("")
  const [email, setEmail] = useState("")
+ const [lastName, setLastName] = useState("")
+ const [telefono, setTelefono] = useState("")
  const [password, setPassword] = useState("")
  const [confirmPassword, setConfirmPassword] = useState("")
  const [error, setError] = useState("")
@@ -25,6 +27,23 @@ return (
         placeholderTextColor="#999"
         value={nombre}
         onChangeText={setNombre}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Apellido"
+        placeholderTextColor="#999"
+        value={lastName}
+        onChangeText={setLastName}
+      />
+
+            <TextInput
+        style={styles.input}
+        placeholder="Telefono"
+        placeholderTextColor="#999"
+        keyboardType="phone-pad"
+        value={telefono}
+        onChangeText={setTelefono}
       />
 
       <TextInput
@@ -61,7 +80,7 @@ return (
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {registro(nombre,email,password,confirmPassword)}}
+        onPress={() => {registro(nombre,email,lastName,telefono,password,confirmPassword)}}
       >
         <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
