@@ -1,6 +1,7 @@
 import {router, Stack, useRouter, useSegments} from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { AuthProvider, useAuth } from '../context/AuthContext'
+import { LugarProvider } from '../context/LugarContext';
 
 function RootLayoutNav() {
   const router = useRouter();
@@ -16,8 +17,9 @@ function RootLayoutNav() {
   useEffect(() => {
      if (!listo) return;
     const estaEnAuth = segments[0] === '(auth)';
+    const estaEnLugar = segments[0] === 'lugar'
 
-    if (!user && !estaEnAuth) {
+    if (!user && !estaEnAuth && !estaEnLugar) {
       router.replace('/(auth)/iniciarSesion');
     } else if (user && estaEnAuth) {
       router.replace('/(tabs)/home');
@@ -29,6 +31,7 @@ function RootLayoutNav() {
       <Stack.Screen name="index" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="(auth)" />
+      <Stack.Screen name="lugar" />
     </Stack>
   );
 }
@@ -36,7 +39,9 @@ function RootLayoutNav() {
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <RootLayoutNav />
+      <LugarProvider>
+        <RootLayoutNav/>
+      </LugarProvider>
     </AuthProvider>
   );
 }

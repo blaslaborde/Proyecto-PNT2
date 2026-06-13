@@ -33,7 +33,7 @@ const registro = async (nombre,email,lastName,telefono,password,confirmPassword)
                 password: password
             })
         })
-        const nuevoUsuario = await response.json() // MockAPI te devuelve el usuario con su ID
+        const nuevoUsuario = await response.json() 
         console.log("USUARIO REGISTRADO", nuevoUsuario)
         setUser(nuevoUsuario)
         setError("")
