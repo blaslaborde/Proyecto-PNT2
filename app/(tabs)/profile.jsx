@@ -4,25 +4,28 @@ import { useAuth } from '../../context/AuthContext'
 import { useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useResenias } from '../../context/ReseniasContext'
+import { useLugaresUsuario } from "../../context/LugaresUsuarioContext";
 
 
 export default function profile() {
   const router = useRouter()  
   const {user,logOut} = useAuth()
   const { misResenias, traerMisResenias } = useResenias()
-  const { mislugaresGuardados, setMislugaresGuardados } = useState([])
+  const {
+  misLugaresGuardados, misLugaresVisitados, traerMisLugares} = useLugaresUsuario();
 
   useEffect(() => {
     if (user?.id) {
       traerMisResenias(user.id);
+      traerMisLugares(user.id);
     }
   }, [user]);
 
   const stats = [
-    { num: misResenias.length, label: 'Reseñas'},
-    { num: 0, label: 'Guardados',},
-    { num: 3,  label: 'Visitas'},
-  ];
+  { num: misResenias.length, label: 'Reseñas' },
+  { num: misLugaresGuardados.length, label: 'Guardados' },
+  { num: misLugaresVisitados.length, label: 'Visitados' },
+];
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#121212' }}>
@@ -83,7 +86,23 @@ export default function profile() {
 
   <View style={styles.menuText}>
     <Text style={styles.menuLabel}>Lugares guardados</Text>
-    <Text style={styles.menuSub}>0 lugares en tu lista</Text>
+    <Text style={styles.menuSub}>{misLugaresGuardados.length} lugares en tu lista</Text>
+  </View>
+
+  <Text style={styles.chevron}>›</Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={styles.menuItem}
+  onPress={() => router.push('/mis-lugares-visitados')}
+>
+  <View style={[styles.menuIcon, styles.menuIconOrange]}>
+    <Text style={styles.menuIconText}>✓</Text>
+  </View>
+
+  <View style={styles.menuText}>
+    <Text style={styles.menuLabel}>Lugares visitados</Text>
+    <Text style={styles.menuSub}>{misLugaresVisitados.length} lugares visitados</Text>
   </View>
 
   <Text style={styles.chevron}>›</Text>
@@ -93,15 +112,19 @@ export default function profile() {
 
         <Text style={styles.sectionTitle}>CUENTA</Text>
         <View style={styles.menuGroup}>
-          <TouchableOpacity style={styles.menuItem}>
-            <View style={[styles.menuIcon, styles.menuIconGray]}>
-              <Text style={styles.menuIconText}>✎</Text>
-            </View>
-            <View style={styles.menuText}>
-              <Text style={styles.menuLabel}>Editar perfil</Text>
-            </View>
-            <Text style={styles.chevron}>›</Text>
-          </TouchableOpacity>
+         <TouchableOpacity
+    style={styles.menuItem}
+    onPress={() => router.push('/editar-perfil')}>
+    <View style={[styles.menuIcon, styles.menuIconGray]}>
+      <Text style={styles.menuIconText}>✎</Text>
+    </View>
+
+    <View style={styles.menuText}>
+      <Text style={styles.menuLabel}>Editar perfil</Text>
+    </View>
+
+    <Text style={styles.chevron}>›</Text>
+  </TouchableOpacity>
 
           <View style={styles.divider} />
 

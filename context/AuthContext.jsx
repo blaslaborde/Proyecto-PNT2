@@ -74,8 +74,27 @@ const registro = async (nombre,email,lastName,telefono,password,confirmPassword)
         router.replace("/(auth)/iniciarSesion")
   }
 
+  const updateProfile = async (updatedData) => {
+  try {
+    const response = await fetch(
+      `https://6a161d251b90031f81b0b0c9.mockapi.io/users/${user.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      }
+    );
+
+    const userActualizado = await response.json();
+    setUser(userActualizado);
+  } catch (e) {
+    setError("Error al actualizar perfil");
+  }
+};
     return(
-        <AuthContext.Provider value={{user,login,logOut,registro,error}}>
+        <AuthContext.Provider value={{user,login,logOut,registro,error,updateProfile}}>
             {children}
         </AuthContext.Provider>
     )

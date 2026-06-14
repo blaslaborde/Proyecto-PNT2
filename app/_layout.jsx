@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { AuthProvider, useAuth } from '../context/AuthContext'
 import { LugarProvider } from '../context/LugarContext';
 import { ReseniasProvider } from '../context/ReseniasContext';
+import { LugaresUsuarioProvider } from "../context/LugaresUsuarioContext";
 
 function RootLayoutNav() {
   const router = useRouter();
@@ -35,6 +36,7 @@ function RootLayoutNav() {
       <Stack.Screen name="lugar" />
       <Stack.Screen name="mis-resenias" />
       <Stack.Screen name="mis-lugares-guardados" />
+      <Stack.Screen name="mis-lugares-visitados" />
     </Stack>
   );
 }
@@ -44,7 +46,9 @@ export default function RootLayout() {
     <AuthProvider>
       <LugarProvider>
         <ReseniasProvider>
+          <LugaresUsuarioProvider>
           <RootLayoutNav/>
+          </LugaresUsuarioProvider>
         </ReseniasProvider>
       </LugarProvider>
     </AuthProvider>

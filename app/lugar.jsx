@@ -5,11 +5,15 @@ import { useRouter } from "expo-router";
 import { useLugar } from "../context/LugarContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ReseniasList from "../components/ReseniasList";
+import { useAuth } from "../context/AuthContext";
+import { useLugaresUsuario } from "../context/LugaresUsuarioContext";
 
 export default function Lugar() {
   const { lugarSeleccionado } = useLugar();
   const router = useRouter();
   const [lugar, setLugar] = useState(null);
+  const { user } = useAuth();
+  const { traerMisLugares } = useLugaresUsuario();
 
   useEffect(() => {
     const fetchLugar = async () => {
@@ -22,6 +26,114 @@ export default function Lugar() {
       fetchLugar();
     }
   }, [lugarSeleccionado]);
+
+  const guardarLugar = async () => {
+  try {
+    const response = await fetch(
+      "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario"
+    );
+
+    const relaciones = await response.json();
+
+    const existe = relaciones.some(
+  (r) =>
+    String(r.userId) === String(user.id) &&
+    String(r.lugarId) === String(lugar.id)
+);
+
+    if (existe) {
+      await fetch(
+        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario/${relacionExistente.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...relacionExistente,
+            guardado: true,
+          }),
+        }
+      );
+    } else {
+      await fetch(
+        "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            lugarId: lugar.id,
+            userId: user.id,
+            guardado: true,
+            visitado: false,
+            favorito: false,
+          }),
+        }
+      );
+    }
+
+    await traerMisLugares(user.id);
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const visitarLugar = async () => {
+  try {
+    const response = await fetch(
+      "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario"
+    );
+
+    const relaciones = await response.json();
+
+    const existe = relaciones.some(
+  (r) =>
+    String(r.userId) === String(user.id) &&
+    String(r.lugarId) === String(lugar.id)
+);
+
+    if (existe) {
+      await fetch(
+        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario/${relacionExistente.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...relacionExistente,
+            visitado: true,
+          }),
+        }
+      );
+    } else {
+      await fetch(
+        "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            lugarId: lugar.id,
+            userId: user.id,
+            guardado: false,
+            visitado: true,
+            favorito: false,
+          }),
+        }
+      );
+    }
+
+    await traerMisLugares(user.id);
+
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   if (!lugar) return null;
 
@@ -42,6 +154,26 @@ export default function Lugar() {
           <Text style={styles.nombre}>{lugar.nombre}</Text>
           <Text style={styles.meta}>{lugar.categoria} · {lugar.barrio}</Text>
           <Text style={styles.direccion}>{lugar.direccion}</Text>
+
+          <View style={styles.botonesContainer}>
+  <TouchableOpacity
+    style={styles.botonAccion}
+    onPress={guardarLugar}
+  >
+    <Text style={styles.botonTexto}>
+      Guardar
+    </Text>
+  </TouchableOpacity>
+
+  <TouchableOpacity
+    style={styles.botonAccion}
+    onPress={visitarLugar}
+  >
+    <Text style={styles.botonTexto}>
+      Visitado
+    </Text>
+  </TouchableOpacity>
+</View>
 
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
@@ -190,4 +322,23 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#3a3530",
   },
+botonesContainer: {
+  flexDirection: "row",
+  gap: 10,
+  marginBottom: 24,
+},
+botonAccion: {
+  flex: 1,
+  backgroundColor: "#252525",
+  borderWidth: 0.5,
+  borderColor: "rgba(255,255,255,0.07)",
+  borderRadius: 12,
+  paddingVertical: 14,
+  alignItems: "center",
+},
+botonTexto: {
+  color: "#F97316",
+  fontSize: 14,
+  fontWeight: "600",
+},
 });
