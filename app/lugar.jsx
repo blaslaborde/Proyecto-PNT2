@@ -129,7 +129,7 @@ const visitarLugar = async () => {
       <ScrollView style={styles.container}>
 
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+          <TouchableOpacity onPress={() => router.replace("/(tabs)/lugar")} style={styles.backBtn}>
             <Ionicons name="chevron-back" size={22} color="#f0ebe5" />
           </TouchableOpacity>
           <View style={styles.headerImagen}>
@@ -166,7 +166,7 @@ const visitarLugar = async () => {
             <View style={styles.statItem}>
               <Text style={styles.statVal}>
                 {lugar.cantResenias > 0
-                  ? (lugar.totalPuntuacion / lugar.cantResenias).toFixed(1)
+                  ? lugar.puntuacion.toFixed(1)
                   : "-"}
               </Text>
               <Text style={styles.statLbl}>Rating</Text>

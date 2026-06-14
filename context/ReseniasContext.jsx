@@ -50,13 +50,15 @@ export function ReseniasProvider({ children }) {
 
       const nuevosTotalPuntuacion = (lugar.totalPuntuacion || 0) + nuevaResenia.puntuacion;
       const nuevasCantResenias = (lugar.cantResenias || 0) + 1;
-      
+      const nuevaPuntuacionFinal = nuevosTotalPuntuacion / nuevasCantResenias
+
       await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugar.id}`, {
-         method: "PUT",
+         method: "PATCH",
          headers: { "Content-Type": "application/json" },
          body: JSON.stringify({
             totalPuntuacion: nuevosTotalPuntuacion,
-            cantResenias: nuevasCantResenias
+            cantResenias: nuevasCantResenias,
+            puntuacion:nuevaPuntuacionFinal
          })
       });
       
@@ -77,13 +79,17 @@ export function ReseniasProvider({ children }) {
 
       const response = await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarId}`);
       const lugar = await response.json();
-      
+      const nuevasCantResenias = (lugar.cantResenias || 1) - 1;
+      const nuevosTotalPuntuacion = (lugar.totalPuntuacion || 0) - puntuacion;
+      const nuevaPuntuacionFinal = nuevasCantResenias > 0 ? nuevosTotalPuntuacion / nuevasCantResenias : 0
+            
       await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarId}`, {
-         method: "PUT",
+         method: "PATCH",
          headers: { "Content-Type": "application/json" },
          body: JSON.stringify({
-            totalPuntuacion: (lugar.totalPuntuacion || 0) - puntuacion,
-            cantResenias: (lugar.cantResenias || 1) - 1
+            totalPuntuacion: nuevosTotalPuntuacion,
+            cantResenias: nuevasCantResenias,
+            puntuacion: nuevaPuntuacionFinal
          })
       });
     } catch (error) {
@@ -104,23 +110,29 @@ export function ReseniasProvider({ children }) {
        setReseniasLugar(prev => prev.map(r => r.id === reseniaId ? reseniaActualizada : r));
 
        if (puntuacionAntigua !== nuevaPuntuacion) {
-         const respLugar = await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarId}`);
-         const lugar = await respLugar.json();
+        const respLugar = await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarId}`);
+        const lugar = await respLugar.json();
+        const nuevosTotalPuntuacion = (lugar.totalPuntuacion || 0) + (nuevaPuntuacion - puntuacionAntigua);
+        const nuevaPuntuacionFinal = nuevosTotalPuntuacion / lugar.cantResenias
          
-         await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarId}`, {
-            method: "PUT",
+         await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarId}`), {
+            method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ totalPuntuacion: (lugar.totalPuntuacion || 0) + (nuevaPuntuacion - puntuacionAntigua) })
-         });
-       }
+            body: JSON.stringify({
+              totalPuntuacion: nuevosTotalPuntuacion,
+              puntuacion: nuevaPuntuacionFinal
+            })
+          }
+        }
      } catch(e) {
         console.log("Error editando", e);
      }
-  };
+  
 
   return (
     <ReseniasContext.Provider value={{ reseniasLugar, misResenias, traerReseniasPorLugar, traerMisResenias, agregarResenia, eliminarResenia, editarResenia }}>
       {children}
     </ReseniasContext.Provider>
   );
+  }
 }
