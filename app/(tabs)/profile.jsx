@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useAuth } from '../../context/AuthContext'
 import { useRouter } from 'expo-router'
+import { Ionicons } from "@expo/vector-icons"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useResenias } from '../../context/ReseniasContext'
 
 
 export default function profile() {
   const router = useRouter()  
-  const {user,logOut} = useAuth()
+  const {user,logOut,eliminarPerfil} = useAuth()
   const { misResenias, traerMisResenias } = useResenias()
   const { mislugaresGuardados, setMislugaresGuardados } = useState([])
 
@@ -62,13 +63,13 @@ export default function profile() {
         <View style={styles.menuGroup}>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/mis-resenias')}>
             <View style={[styles.menuIcon, styles.menuIconOrange]}>
-              <Text style={styles.menuIconText}>★</Text>
+              <Ionicons name="star" size={18} color="#F97316" />
             </View>
             <View style={styles.menuText}>
               <Text style={styles.menuLabel}>Mis reseñas</Text>
               <Text style={styles.menuSub}>{misResenias.length} reseña(s) publicadas</Text>
             </View>
-            <Text style={styles.chevron}>›</Text>
+            <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
           </TouchableOpacity>
 
           <View style={styles.divider} />
@@ -78,7 +79,7 @@ export default function profile() {
   onPress={() => router.push('/mis-lugares-guardados')}
 >
   <View style={[styles.menuIcon, styles.menuIconOrange]}>
-    <Text style={styles.menuIconText}>⊡</Text>
+    <Ionicons name="star" size={18} color="#F97316" />
   </View>
 
   <View style={styles.menuText}>
@@ -86,44 +87,60 @@ export default function profile() {
     <Text style={styles.menuSub}>0 lugares en tu lista</Text>
   </View>
 
-  <Text style={styles.chevron}>›</Text>
+  <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
 </TouchableOpacity>
 
-</View>
+</View> 
+          <View>
+          <TouchableOpacity style={styles.menuItem}>
+            <View style={[styles.menuIcon, styles.menuIconOrange]}>
+              <Ionicons name="bookmark" size={18} color="#F97316" />
+            </View>
+            <View style={styles.menuText}>
+              <Text style={styles.menuLabel}>Lugares guardados</Text>
+              <Text style={styles.menuSub}>8 lugares en tu lista</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
+          </TouchableOpacity>
+        </View>
 
         <Text style={styles.sectionTitle}>CUENTA</Text>
         <View style={styles.menuGroup}>
           <TouchableOpacity style={styles.menuItem}>
             <View style={[styles.menuIcon, styles.menuIconGray]}>
-              <Text style={styles.menuIconText}>✎</Text>
+              <Ionicons name="pencil" size={18} color="#7a6f66" />
             </View>
             <View style={styles.menuText}>
               <Text style={styles.menuLabel}>Editar perfil</Text>
             </View>
-            <Text style={styles.chevron}>›</Text>
+            <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
           </TouchableOpacity>
 
           <View style={styles.divider} />
 
           <TouchableOpacity style={styles.menuItem}>
             <View style={[styles.menuIcon, styles.menuIconGray]}>
-              <Text style={styles.menuIconText}>🔔</Text>
+              <Ionicons name="notifications-outline" size={18} color="#7a6f66" />
             </View>
             <View style={styles.menuText}>
               <Text style={styles.menuLabel}>Notificaciones</Text>
             </View>
-            <Text style={styles.chevron}>›</Text>
+            <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
           </TouchableOpacity>
         </View>
 
       
-        <TouchableOpacity style={styles.logoutGroup} onPress={logOut}>
-          <View style={styles.logoutIcon}>
-            <Text style={styles.logoutIconText}>⏻</Text>
-          </View>
-          <Text style={styles.logoutLabel}>Cerrar sesión</Text>
-        </TouchableOpacity>
-
+          <TouchableOpacity style={styles.logoutGroup} onPress={logOut}>
+            <View style={styles.logoutIcon}>
+              <Ionicons name="log-out-outline" size={18} color="#7a6f66" />
+            </View>
+            <Text style={styles.logoutLabel}>Cerrar sesión</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.deleteBtn} onPress={() => eliminarPerfil(user.id)}>
+            <Ionicons name="trash-outline" size={18} color="#fff" />
+            <Text style={styles.deleteBtnText}>Eliminar cuenta</Text>
+          </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -312,4 +329,22 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: RED,
   },
+  deleteBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#dc2626",
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop: 12,
+    marginBottom: 32,
+    gap: 8,
+    alignSelf: "center",
+  },
+  deleteBtnText: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "600",
+  }
 });

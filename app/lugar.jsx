@@ -10,18 +10,7 @@ export default function Lugar() {
   const { lugarSeleccionado } = useLugar();
   const router = useRouter();
   const [lugar, setLugar] = useState(null);
-
-  useEffect(() => {
-    const fetchLugar = async () => {
-      const response = await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarSeleccionado}`);
-      const data = await response.json();
-      setLugar(data);
-    };
-
-    if (lugarSeleccionado) {
-      fetchLugar();
-    }
-  }, [lugarSeleccionado]);
+  const { lugar } = useLugar();
 
   if (!lugar) return null;
 

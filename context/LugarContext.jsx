@@ -7,8 +7,18 @@ export const useLugar = () => useContext(LugarContext);
 export function LugarProvider({ children }) {
   const [lugarSeleccionado, setLugarSeleccionado] = useState(null);
 
+   const fetchLugar = async (id) => {
+    try {
+      const response = await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${id}`);
+      const data = await response.json();
+      setLugar(data);
+    } catch (error) {
+      console.log("Error trayendo el lugar", error);
+    }
+  };
+
   return (
-    <LugarContext.Provider value={{ lugarSeleccionado, setLugarSeleccionado }}>
+    <LugarContext.Provider value={{ lugarSeleccionado, setLugarSeleccionado,fetchLugar}}>
       {children}
     </LugarContext.Provider>
   );
