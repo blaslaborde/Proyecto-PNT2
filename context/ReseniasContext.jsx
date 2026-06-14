@@ -6,11 +6,12 @@ export const useResenias = () => useContext(ReseniasContext);
 
 export function ReseniasProvider({ children }) {
   const [reseniasLugar, setReseniasLugar] = useState([]);
+  const [misResenias, setMisResenias] = useState([]);
 
   // Función para traer reseñas de un lugar específico
   const traerReseniasPorLugar = async (lugarId) => {
     try {
-      const response = await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/resenias?lugarId=${lugarId}`);
+      const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenias?lugarId=${lugarId}`);
       const data = await response.json();
       if (Array.isArray(data)) {
         setReseniasLugar(data);
@@ -22,10 +23,25 @@ export function ReseniasProvider({ children }) {
     }
   };
 
+  // Función para traer las reseñas de un usuario específico
+  const traerMisResenias = async (userId) => {
+    try {
+      const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenias?userId=${userId}`);
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setMisResenias(data);
+      } else {
+        setMisResenias([]); // Si no hay coincidencias
+      }
+    } catch (error) {
+      console.log("Error trayendo mis reseñas", error);
+    }
+  };
+
   // Función para agregar una reseña y actualizar el lugar
   const agregarResenia = async (nuevaResenia, lugar, onActualizarLugar) => {
     try {
-      const response = await fetch("https://6a161d251b90031f81b0b0c9.mockapi.io/resenias", {
+      const response = await fetch("https://6a28ac664e1e783349a5df43.mockapi.io/resenias", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevaResenia),
@@ -53,7 +69,7 @@ export function ReseniasProvider({ children }) {
   };
 
   return (
-    <ReseniasContext.Provider value={{ reseniasLugar, traerReseniasPorLugar, agregarResenia }}>
+    <ReseniasContext.Provider value={{ reseniasLugar, misResenias, traerReseniasPorLugar, traerMisResenias, agregarResenia }}>
       {children}
     </ReseniasContext.Provider>
   );

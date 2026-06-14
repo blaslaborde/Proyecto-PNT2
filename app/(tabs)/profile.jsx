@@ -1,16 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useAuth } from '../../context/AuthContext'
 import { useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useResenias } from '../../context/ReseniasContext'
 
 
 export default function profile() {
   const router = useRouter()  
   const {user,logOut} = useAuth()
+  const { misResenias, traerMisResenias } = useResenias()
+
+  useEffect(() => {
+    if (user?.id) {
+      traerMisResenias(user.id);
+    }
+  }, [user]);
 
   const stats = [
-    { num: 12, label: 'Reseñas' },
+    { num: misResenias.length, label: 'Reseñas' },
     { num: 8,  label: 'Guardados' },
     { num: 3,  label: 'Visitas' },
   ];
@@ -42,13 +50,13 @@ export default function profile() {
       
         <Text style={styles.sectionTitle}>MI ACTIVIDAD</Text>
         <View style={styles.menuGroup}>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/mis-resenias')}>
             <View style={[styles.menuIcon, styles.menuIconOrange]}>
               <Text style={styles.menuIconText}>★</Text>
             </View>
             <View style={styles.menuText}>
               <Text style={styles.menuLabel}>Mis reseñas</Text>
-              <Text style={styles.menuSub}>12 reseñas publicadas</Text>
+              <Text style={styles.menuSub}>{misResenias.length} reseña(s) publicadas</Text>
             </View>
             <Text style={styles.chevron}>›</Text>
           </TouchableOpacity>
