@@ -7,16 +7,16 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useAuth } from "../context/AuthContext";
-import { useLugar, setCantGuardados,setCantVisitados } from "../context/LugarContext";
+import { useLugar } from "../context/LugarContext";
 
-export default function MisLugaresGuardados() {
+export default function MisLugaresVisitados() {
   const { user } = useAuth();
   const { setLugarSeleccionado } = useLugar();
   const router = useRouter();
+
   const [lugares, setLugares] = useState([]);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function MisLugaresGuardados() {
         const lugaresFiltrados = lugaresApi.filter(
           (lugar) => lugaresIds.includes(lugar.id)
         );
-        setCantGuardados(lugaresFiltrados.length)
+
         setLugares(lugaresFiltrados);
       } catch (error) {
         console.log(error);
@@ -76,7 +76,7 @@ export default function MisLugaresGuardados() {
         </TouchableOpacity>
 
         <Text style={styles.title}>
-          Mis lugares guardados
+          Mis lugares visitados
         </Text>
       </View>
 
@@ -106,7 +106,7 @@ export default function MisLugaresGuardados() {
 
         {lugares.length === 0 && (
           <Text style={styles.empty}>
-            No tenés lugares guardados.
+            No tenés lugares visitados.
           </Text>
         )}
       </ScrollView>
