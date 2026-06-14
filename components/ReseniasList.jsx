@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
 import { useResenias } from "../context/ReseniasContext";
@@ -9,6 +9,7 @@ export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
   const { reseniasLugar, traerReseniasPorLugar, agregarResenia } = useResenias();
   const [escribiendo, setEscribiendo] = useState(false);
   const [comentario, setComentario] = useState("");
+  const [foto, setFoto] = useState("");
   const [rating, setRating] = useState(5);
 
   useEffect(() => {
@@ -26,11 +27,13 @@ export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
       userName: user?.name,
       rating: rating,
       comentario: comentario,
+      foto: foto,
       fecha: new Date().toLocaleDateString()
     };
 
     await agregarResenia(nuevaResenia, lugar, onActualizarLugar);
     setComentario("");
+    setFoto("");
     setRating(5);
     setEscribiendo(false);
   };
@@ -64,6 +67,13 @@ export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
             value={comentario}
             onChangeText={setComentario}
           />
+          <TextInput
+            style={[styles.inputResenia, { minHeight: 40 }]}
+            placeholder="URL de foto (Opcional)"
+            placeholderTextColor="#7a6f66"
+            value={foto}
+            onChangeText={setFoto}
+          />
           <View style={styles.formReseniaActions}>
             <TouchableOpacity onPress={() => setEscribiendo(false)} style={styles.btnCancelar}>
               <Text style={styles.btnCancelarText}>Cancelar</Text>
@@ -86,6 +96,9 @@ export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
               </View>
             </View>
             <Text style={styles.reseniaText}>{r.comentario}</Text>
+            {r.foto ? (
+              <Image source={{ uri: r.foto }} style={styles.reseniaImagen} />
+            ) : null}
             <Text style={styles.reseniaDate}>{r.fecha}</Text>
           </View>
         ))
@@ -133,5 +146,6 @@ const styles = StyleSheet.create({
   reseniaText: {
     color: '#cfc9c2', fontSize: 13, lineHeight: 18, marginBottom: 8,
   },
+  reseniaImagen: { width: '100%', height: 150, borderRadius: 8, marginBottom: 8, resizeMode: 'cover' },
   reseniaDate: { color: '#7a6f66', fontSize: 11 },
 });
