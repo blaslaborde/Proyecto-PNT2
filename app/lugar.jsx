@@ -9,8 +9,7 @@ import ReseniasList from "../components/ReseniasList";
 export default function Lugar() {
   const { lugarSeleccionado } = useLugar();
   const router = useRouter();
-  const [lugar, setLugar] = useState(null);
-  const { lugar } = useLugar();
+  const { lugar,fetchLugar } = useLugar();
 
   if (!lugar) return null;
 
@@ -71,9 +70,9 @@ export default function Lugar() {
           </View>
 
           <ReseniasList 
-             lugarId={lugarSeleccionado} 
+             lugarId={lugar.id} 
              lugar={lugar} 
-             onActualizarLugar={setLugar} 
+             onActualizarLugar={(data) => fetchLugar(lugar.id)} 
           />
 
         </View>

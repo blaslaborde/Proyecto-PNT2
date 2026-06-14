@@ -73,36 +73,22 @@ export default function profile() {
           </TouchableOpacity>
 
           <View style={styles.divider} />
-
-<TouchableOpacity
-  style={styles.menuItem}
-  onPress={() => router.push('/mis-lugares-guardados')}
->
-  <View style={[styles.menuIcon, styles.menuIconOrange]}>
-    <Ionicons name="star" size={18} color="#F97316" />
-  </View>
-
-  <View style={styles.menuText}>
-    <Text style={styles.menuLabel}>Lugares guardados</Text>
-    <Text style={styles.menuSub}>0 lugares en tu lista</Text>
-  </View>
-
-  <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
-</TouchableOpacity>
-
-</View> 
-          <View>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => router.push('/mis-lugares-guardados')}
+          >
             <View style={[styles.menuIcon, styles.menuIconOrange]}>
               <Ionicons name="bookmark" size={18} color="#F97316" />
             </View>
+
             <View style={styles.menuText}>
               <Text style={styles.menuLabel}>Lugares guardados</Text>
-              <Text style={styles.menuSub}>8 lugares en tu lista</Text>
+              <Text style={styles.menuSub}>0 lugares en tu lista</Text>
             </View>
+
             <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
           </TouchableOpacity>
-        </View>
+        </View> 
 
         <Text style={styles.sectionTitle}>CUENTA</Text>
         <View style={styles.menuGroup}>
