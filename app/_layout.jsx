@@ -2,6 +2,7 @@ import {router, Stack, useRouter, useSegments} from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { AuthProvider, useAuth } from '../context/AuthContext'
 import { LugarProvider } from '../context/LugarContext';
+import { ReseniasProvider } from '../context/ReseniasContext';
 
 function RootLayoutNav() {
   const router = useRouter();
@@ -40,9 +41,10 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <LugarProvider>
-        <RootLayoutNav/>
+        <ReseniasProvider>
+          <RootLayoutNav/>
+        </ReseniasProvider>
       </LugarProvider>
     </AuthProvider>
   );
 }
-

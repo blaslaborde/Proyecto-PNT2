@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useLugar } from "../context/LugarContext";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ReseniasList from "../components/ReseniasList";
 
 export default function Lugar() {
   const { lugarSeleccionado } = useLugar();
@@ -16,7 +17,10 @@ export default function Lugar() {
       const data = await response.json();
       setLugar(data);
     };
-    fetchLugar();
+
+    if (lugarSeleccionado) {
+      fetchLugar();
+    }
   }, [lugarSeleccionado]);
 
   if (!lugar) return null;
@@ -76,6 +80,12 @@ export default function Lugar() {
               <Text style={styles.empty}>Sin fotos cargadas</Text>
             )}
           </View>
+
+          <ReseniasList 
+             lugarId={lugarSeleccionado} 
+             lugar={lugar} 
+             onActualizarLugar={setLugar} 
+          />
 
         </View>
       </ScrollView>
