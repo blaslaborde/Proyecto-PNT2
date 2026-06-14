@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext()
 
@@ -9,6 +10,23 @@ export function AuthProvider({children}){
     const router = useRouter()
     const [user, setUser] = useState(null)
     const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const cargarUsuario = async () => {
+            try {
+                const usuarioGuardado = await AsyncStorage.getItem("user");
+                if (usuarioGuardado) {
+                    setUser(JSON.parse(usuarioGuardado));
+                    setLoading(false);
+                }
+            } catch (error) {
+                console.log("Error cargando usuario", error);
+            }
+        };
+        cargarUsuario();
+    }, []);
+
 
     const registro = async (nombre,email,lastName,telefono,password,confirmPassword) => {
         try {
@@ -34,6 +52,7 @@ export function AuthProvider({children}){
             })
             const nuevoUsuario = await response.json() 
             console.log("USUARIO REGISTRADO", nuevoUsuario)
+            AsyncStorage.setItem("user", JSON.stringify(nuevoUsuario))
             setUser(nuevoUsuario)
             setError("")
             router.replace("/(tabs)/home")
@@ -61,6 +80,7 @@ export function AuthProvider({children}){
             }
             console.log("SESION INICIADA CON EXITO")
             router.replace("/(tabs)/home")
+            AsyncStorage.setItem("user", JSON.stringify(buscar))
             setUser(buscar)
             setError("")
         } catch (error){
@@ -70,6 +90,7 @@ export function AuthProvider({children}){
     } 
     const logOut = () => {
         try{
+            AsyncStorage.removeItem("user")
             setUser(null)
             router.replace("/(auth)/iniciarSesion")
         } catch (error) {
@@ -91,7 +112,7 @@ export function AuthProvider({children}){
         
 
     return(
-        <AuthContext.Provider value={{user,login,logOut,registro,eliminarPerfil,error}}>
+        <AuthContext.Provider value={{user,login,logOut,registro,eliminarPerfil,error, loading}}>
             {children}
         </AuthContext.Provider>
     )

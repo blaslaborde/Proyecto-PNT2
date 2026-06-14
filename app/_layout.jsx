@@ -6,7 +6,7 @@ import { ReseniasProvider } from '../context/ReseniasContext';
 
 function RootLayoutNav() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const segments = useSegments();
   const [listo, setListo] = useState(false);
 
@@ -16,6 +16,9 @@ function RootLayoutNav() {
 
 
   useEffect(() => {
+
+    if (loading) return;
+
      if (!listo) return;
     const estaEnAuth = segments[0] === '(auth)';
     const estaEnLugar = segments[0] === 'lugar'
