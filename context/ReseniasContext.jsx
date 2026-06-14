@@ -11,7 +11,7 @@ export function ReseniasProvider({ children }) {
   // Función para traer reseñas de un lugar específico
   const traerReseniasPorLugar = async (lugarId) => {
     try {
-      const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenias?lugarId=${lugarId}`);
+      const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenia?lugarId=${lugarId}`);
       const data = await response.json();
       if (Array.isArray(data)) {
         setReseniasLugar(data);
@@ -26,7 +26,7 @@ export function ReseniasProvider({ children }) {
   // Función para traer las reseñas de un usuario específico
   const traerMisResenias = async (userId) => {
     try {
-      const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenias?userId=${userId}`);
+      const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenia?userId=${userId}`);
       const data = await response.json();
       if (Array.isArray(data)) {
         setMisResenias(data);
@@ -41,17 +41,18 @@ export function ReseniasProvider({ children }) {
   // Función para agregar una reseña y actualizar el lugar
   const agregarResenia = async (nuevaResenia, lugar, onActualizarLugar) => {
     try {
-      const response = await fetch("https://6a28ac664e1e783349a5df43.mockapi.io/resenias", {
+      const response = await fetch("https://6a28ac664e1e783349a5df43.mockapi.io/resenia", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevaResenia),
       });
       const data = await response.json();
       
-      setReseniasLugar([data, ...reseniasLugar]);
+      setReseniasLugar(prev => [data, ...prev]);
+      setMisResenias(prev => [data, ...prev]);
 
-      const nuevosTotalPuntuacion = lugar.totalPuntuacion + nuevaResenia.rating;
-      const nuevasCantResenias = lugar.cantResenias + 1;
+      const nuevosTotalPuntuacion = (lugar.totalPuntuacion || 0) + nuevaResenia.puntuacion;
+      const nuevasCantResenias = (lugar.cantResenias || 0) + 1;
       
       await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugar.id}`, {
          method: "PUT",
@@ -69,9 +70,9 @@ export function ReseniasProvider({ children }) {
   };
 
   // Función para eliminar una reseña
-  const eliminarResenia = async (reseniaId, lugarId, rating) => {
+  const eliminarResenia = async (reseniaId, lugarId, puntuacion) => {
     try {
-      await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenias/${reseniaId}`, {
+      await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenia/${reseniaId}`, {
         method: "DELETE"
       });
 
@@ -86,8 +87,8 @@ export function ReseniasProvider({ children }) {
          method: "PUT",
          headers: { "Content-Type": "application/json" },
          body: JSON.stringify({
-            totalPuntuacion: lugar.totalPuntuacion - rating,
-            cantResenias: lugar.cantResenias - 1
+            totalPuntuacion: (lugar.totalPuntuacion || 0) - puntuacion,
+            cantResenias: (lugar.cantResenias || 1) - 1
          })
       });
     } catch (error) {
@@ -96,26 +97,26 @@ export function ReseniasProvider({ children }) {
   };
 
   // Función para editar una reseña
-  const editarResenia = async (reseniaId, lugarId, ratingAntiguo, nuevoRating, nuevoComentario, nuevaFoto) => {
+  const editarResenia = async (reseniaId, lugarId, puntuacionAntigua, nuevaPuntuacion, nuevoComentario, nuevaFoto) => {
      try {
-       const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenias/${reseniaId}`, {
+       const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenia/${reseniaId}`, {
          method: "PUT",
          headers: { "Content-Type": "application/json" },
-         body: JSON.stringify({ rating: nuevoRating, comentario: nuevoComentario, foto: nuevaFoto })
+         body: JSON.stringify({ puntuacion: nuevaPuntuacion, comentario: nuevoComentario, foto: nuevaFoto })
        });
        const reseniaActualizada = await response.json();
 
        setMisResenias(prev => prev.map(r => r.id === reseniaId ? reseniaActualizada : r));
        setReseniasLugar(prev => prev.map(r => r.id === reseniaId ? reseniaActualizada : r));
 
-       if (ratingAntiguo !== nuevoRating) {
+       if (puntuacionAntigua !== nuevaPuntuacion) {
          const respLugar = await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarId}`);
          const lugar = await respLugar.json();
          
          await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ totalPuntuacion: lugar.totalPuntuacion + (nuevoRating - ratingAntiguo) })
+            body: JSON.stringify({ totalPuntuacion: (lugar.totalPuntuacion || 0) + (nuevaPuntuacion - puntuacionAntigua) })
          });
        }
      } catch(e) {

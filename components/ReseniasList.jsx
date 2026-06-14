@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
 import { useResenias } from "../context/ReseniasContext";
@@ -10,7 +10,7 @@ export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
   const [escribiendo, setEscribiendo] = useState(false);
   const [comentario, setComentario] = useState("");
   const [foto, setFoto] = useState("");
-  const [rating, setRating] = useState(5);
+  const [puntuacion, setPuntuacion] = useState(5);
 
   useEffect(() => {
     if (lugarId) {
@@ -19,13 +19,16 @@ export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
   }, [lugarId]);
 
   const enviarResenia = async () => {
-    if (!comentario.trim()) return;
+    if (!comentario.trim()) {
+      Alert.alert("Comentario vacío", "Por favor, escribí un comentario para publicar la reseña.");
+      return;
+    }
 
     const nuevaResenia = {
       lugarId: lugarId,
       userId: user?.id,
       userName: user?.name,
-      rating: rating,
+      puntuacion: puntuacion,
       comentario: comentario,
       foto: foto,
       fecha: new Date().toLocaleDateString()
@@ -34,7 +37,7 @@ export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
     await agregarResenia(nuevaResenia, lugar, onActualizarLugar);
     setComentario("");
     setFoto("");
-    setRating(5);
+    setPuntuacion(5);
     setEscribiendo(false);
   };
 
@@ -50,9 +53,9 @@ export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
         <View style={styles.formResenia}>
           <View style={styles.ratingStars}>
             {[1, 2, 3, 4, 5].map((star) => (
-              <TouchableOpacity key={star} onPress={() => setRating(star)}>
+              <TouchableOpacity key={star} onPress={() => setPuntuacion(star)}>
                 <Ionicons 
-                  name={star <= rating ? "star" : "star-outline"} 
+                  name={star <= puntuacion ? "star" : "star-outline"} 
                   size={28} 
                   color="#F97316" 
                 />
@@ -92,7 +95,7 @@ export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
               <Text style={styles.reseniaUser}>{r.userName || 'Usuario'}</Text>
               <View style={styles.reseniaRating}>
                 <Ionicons name="star" size={12} color="#F97316" />
-                <Text style={styles.reseniaRatingText}>{r.rating}</Text>
+                <Text style={styles.reseniaRatingText}>{r.puntuacion}</Text>
               </View>
             </View>
             <Text style={styles.reseniaText}>{r.comentario}</Text>

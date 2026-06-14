@@ -10,28 +10,28 @@ export default function MisResenias() {
   const { misResenias, eliminarResenia, editarResenia } = useResenias();
 
   const [editando, setEditando] = useState(null);
-  const [formEdit, setFormEdit] = useState({ comentario: "", rating: 5, foto: "", ratingAntiguo: 5, lugarId: "" });
+  const [formEdit, setFormEdit] = useState({ comentario: "", puntuacion: 5, foto: "", puntuacionAntigua: 5, lugarId: "" });
 
   const iniciarEdicion = (resenia) => {
     setEditando(resenia.id);
     setFormEdit({
       comentario: resenia.comentario,
-      rating: resenia.rating,
+      puntuacion: resenia.puntuacion,
       foto: resenia.foto || "",
-      ratingAntiguo: resenia.rating,
+      puntuacionAntigua: resenia.puntuacion,
       lugarId: resenia.lugarId
     });
   };
 
   const guardarEdicion = async () => {
-    await editarResenia(editando, formEdit.lugarId, formEdit.ratingAntiguo, formEdit.rating, formEdit.comentario, formEdit.foto);
+    await editarResenia(editando, formEdit.lugarId, formEdit.puntuacionAntigua, formEdit.puntuacion, formEdit.comentario, formEdit.foto);
     setEditando(null);
   };
 
-  const confirmarEliminar = (id, lugarId, rating) => {
+  const confirmarEliminar = (id, lugarId, puntuacion) => {
     Alert.alert("Eliminar reseña", "¿Seguro que querés borrar esta reseña?", [
       { text: "Cancelar", style: "cancel" },
-      { text: "Eliminar", style: "destructive", onPress: () => eliminarResenia(id, lugarId, rating) }
+      { text: "Eliminar", style: "destructive", onPress: () => eliminarResenia(id, lugarId, puntuacion) }
     ]);
   };
 
@@ -52,8 +52,8 @@ export default function MisResenias() {
                 <View>
                   <View style={styles.ratingStars}>
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <TouchableOpacity key={star} onPress={() => setFormEdit({ ...formEdit, rating: star })}>
-                        <Ionicons name={star <= formEdit.rating ? "star" : "star-outline"} size={24} color="#F97316" />
+                      <TouchableOpacity key={star} onPress={() => setFormEdit({ ...formEdit, puntuacion: star })}>
+                        <Ionicons name={star <= formEdit.puntuacion ? "star" : "star-outline"} size={24} color="#F97316" />
                       </TouchableOpacity>
                     ))}
                   </View>
@@ -85,7 +85,7 @@ export default function MisResenias() {
                     <Text style={styles.reseniaDate}>{r.fecha}</Text>
                     <View style={styles.reseniaRating}>
                       <Ionicons name="star" size={14} color="#F97316" />
-                      <Text style={styles.reseniaRatingText}>{r.rating}</Text>
+                      <Text style={styles.reseniaRatingText}>{r.puntuacion}</Text>
                     </View>
                   </View>
                   <Text style={styles.reseniaText}>{r.comentario}</Text>
@@ -98,7 +98,7 @@ export default function MisResenias() {
                       <Ionicons name="pencil-outline" size={18} color="#7a6f66" />
                       <Text style={styles.iconBtnText}>Editar</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => confirmarEliminar(r.id, r.lugarId, r.rating)} style={styles.iconBtn}>
+                    <TouchableOpacity onPress={() => confirmarEliminar(r.id, r.lugarId, r.puntuacion)} style={styles.iconBtn}>
                       <Ionicons name="trash-outline" size={18} color="#E05252" />
                       <Text style={[styles.iconBtnText, { color: "#E05252" }]}>Eliminar</Text>
                     </TouchableOpacity>
