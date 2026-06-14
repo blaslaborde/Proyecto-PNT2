@@ -18,7 +18,6 @@ import { useLugaresUsuario } from "../context/LugaresUsuarioContext";
 export default function Lugar() {
   const router = useRouter();
   const { lugar, fetchLugar } = useLugar();
-  const [lugar, setLugar] = useState(null);
   const { user } = useAuth();
   const { traerMisLugares } = useLugaresUsuario();
 
