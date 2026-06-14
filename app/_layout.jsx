@@ -34,6 +34,7 @@ function RootLayoutNav() {
       <Stack.Screen name="(auth)" />
       <Stack.Screen name="lugar" />
       <Stack.Screen name="mis-resenias" />
+      <Stack.Screen name="mis-lugares-guardados" />
     </Stack>
   );
 }
