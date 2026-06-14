@@ -8,7 +8,6 @@ export function ReseniasProvider({ children }) {
   const [reseniasLugar, setReseniasLugar] = useState([]);
   const [misResenias, setMisResenias] = useState([]);
 
-  // Función para traer reseñas de un lugar específico
   const traerReseniasPorLugar = async (lugarId) => {
     try {
       const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenia?lugarId=${lugarId}`);
@@ -16,14 +15,13 @@ export function ReseniasProvider({ children }) {
       if (Array.isArray(data)) {
         setReseniasLugar(data);
       } else {
-        setReseniasLugar([]); // MockAPI puede devolver texto si no hay coincidencias
+        setReseniasLugar([]);
       }
     } catch (error) {
       console.log("Error trayendo reseñas", error);
     }
   };
 
-  // Función para traer las reseñas de un usuario específico
   const traerMisResenias = async (userId) => {
     try {
       const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenia?userId=${userId}`);
@@ -31,14 +29,13 @@ export function ReseniasProvider({ children }) {
       if (Array.isArray(data)) {
         setMisResenias(data);
       } else {
-        setMisResenias([]); // Si no hay coincidencias
+        setMisResenias([]);
       }
     } catch (error) {
       console.log("Error trayendo mis reseñas", error);
     }
   };
 
-  // Función para agregar una reseña y actualizar el lugar
   const agregarResenia = async (nuevaResenia, lugar, onActualizarLugar) => {
     try {
       const response = await fetch("https://6a28ac664e1e783349a5df43.mockapi.io/resenia", {
@@ -69,7 +66,6 @@ export function ReseniasProvider({ children }) {
     }
   };
 
-  // Función para eliminar una reseña
   const eliminarResenia = async (reseniaId, lugarId, puntuacion) => {
     try {
       await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenia/${reseniaId}`, {
@@ -79,7 +75,6 @@ export function ReseniasProvider({ children }) {
       setMisResenias(prev => prev.filter(r => r.id !== reseniaId));
       setReseniasLugar(prev => prev.filter(r => r.id !== reseniaId));
 
-      // Actualizar stats del lugar
       const response = await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarId}`);
       const lugar = await response.json();
       
@@ -96,7 +91,6 @@ export function ReseniasProvider({ children }) {
     }
   };
 
-  // Función para editar una reseña
   const editarResenia = async (reseniaId, lugarId, puntuacionAntigua, nuevaPuntuacion, nuevoComentario, nuevaFoto) => {
      try {
        const response = await fetch(`https://6a28ac664e1e783349a5df43.mockapi.io/resenia/${reseniaId}`, {
