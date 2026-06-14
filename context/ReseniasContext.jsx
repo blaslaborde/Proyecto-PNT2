@@ -127,12 +127,12 @@ export function ReseniasProvider({ children }) {
      } catch(e) {
         console.log("Error editando", e);
      }
-  
+    }
 
   return (
     <ReseniasContext.Provider value={{ reseniasLugar, misResenias, traerReseniasPorLugar, traerMisResenias, agregarResenia, eliminarResenia, editarResenia }}>
       {children}
     </ReseniasContext.Provider>
   );
-  }
+  
 }

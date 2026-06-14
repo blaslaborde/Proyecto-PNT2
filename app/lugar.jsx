@@ -129,7 +129,7 @@ const visitarLugar = async () => {
       <ScrollView style={styles.container}>
 
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.replace("/(tabs)/lugar")} style={styles.backBtn}>
+          <TouchableOpacity onPress={() => router.replace("/(tabs)/home")} style={styles.backBtn}>
             <Ionicons name="chevron-back" size={22} color="#f0ebe5" />
           </TouchableOpacity>
           <View style={styles.headerImagen}>
