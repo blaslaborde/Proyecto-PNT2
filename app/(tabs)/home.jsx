@@ -12,6 +12,7 @@ export default function home() {
   const { user } = useAuth();
   const [lugares, setLugares] = useState([]);
   const { setLugarSeleccionado } = useLugar();
+  const { fetchLugar } = useLugar();
 
   useEffect(() => {
     const fetchLugares = async () => {
@@ -49,7 +50,7 @@ export default function home() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Los mejores lugares por tu Zona</Text>
           {lugares.map((lugar) => (
-            <TouchableOpacity key={lugar.id} style={styles.card} onPress={() => {setLugarSeleccionado(lugar.id); router.push("/lugar")}}>
+            <TouchableOpacity key={lugar.id} style={styles.card} onPress={async () => { await fetchLugar(lugar.id); router.push("/lugar")}}>
               <View style={styles.cardImagen}>
                   <Ionicons name="restaurant-outline" size={28} color="#F97316" />
               </View>
