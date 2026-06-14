@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  ScrollView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useLugar } from "../context/LugarContext";
@@ -17,6 +10,7 @@ import { useLugaresUsuario } from "../context/LugaresUsuarioContext";
 
 export default function Lugar() {
   const router = useRouter();
+<<<<<<< HEAD
   const { lugar, fetchLugar } = useLugar();
   const { user } = useAuth();
   const { traerMisLugares } = useLugaresUsuario();
@@ -140,31 +134,28 @@ const visitarLugar = async () => {
     console.log(error);
   }
 };
+=======
+  const { lugar,fetchLugar } = useLugar();
+>>>>>>> parent of 3084883 (Hice cambios en lugar, home y lugarContext)
 
   if (!lugar) return null;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#0f0d0b" }}>
       <ScrollView style={styles.container}>
+
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => router.replace("/(tabs)/home")}
-            style={styles.backBtn}
-          >
+          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
             <Ionicons name="chevron-back" size={22} color="#f0ebe5" />
           </TouchableOpacity>
-          <Image
-            source={{ uri: lugar.fotos[1] }}
-            style={styles.headerImagen}
-            resizeMode="cover"
-          />
+          <View style={styles.headerImagen}>
+            <Ionicons name="restaurant-outline" size={48} color="#F97316" />
+          </View>
         </View>
 
         <View style={styles.body}>
           <Text style={styles.nombre}>{lugar.nombre}</Text>
-          <Text style={styles.meta}>
-            {lugar.categoria} · {lugar.barrio}
-          </Text>
+          <Text style={styles.meta}>{lugar.categoria} · {lugar.barrio}</Text>
           <Text style={styles.direccion}>{lugar.direccion}</Text>
 
           <View style={styles.botonesContainer}>
@@ -191,7 +182,7 @@ const visitarLugar = async () => {
             <View style={styles.statItem}>
               <Text style={styles.statVal}>
                 {lugar.cantResenias > 0
-                  ? lugar.puntuacion.toFixed(1)
+                  ? (lugar.totalPuntuacion / lugar.cantResenias).toFixed(1)
                   : "-"}
               </Text>
               <Text style={styles.statLbl}>Rating</Text>
@@ -207,9 +198,7 @@ const visitarLugar = async () => {
             <Text style={styles.sectionTitle}>Redes Sociales</Text>
             {lugar.redesSociales?.length > 0 ? (
               lugar.redesSociales.map((red, index) => (
-                <Text key={index} style={styles.redSocial}>
-                  · {red}
-                </Text>
+                <Text key={index} style={styles.redSocial}>· {red}</Text>
               ))
             ) : (
               <Text style={styles.empty}>Sin redes sociales cargadas</Text>
@@ -220,20 +209,19 @@ const visitarLugar = async () => {
             <Text style={styles.sectionTitle}>Fotos</Text>
             {lugar.fotos?.length > 0 ? (
               lugar.fotos.map((foto, index) => (
-                <Text key={index} style={styles.redSocial}>
-                  · {foto}
-                </Text>
+                <Text key={index} style={styles.redSocial}>· {foto}</Text>
               ))
             ) : (
               <Text style={styles.empty}>Sin fotos cargadas</Text>
             )}
           </View>
 
-          <ReseniasList
-            lugarId={lugar.id}
-            lugar={lugar}
-            onActualizarLugar={(data) => fetchLugar(lugar.id)}
+          <ReseniasList 
+             lugarId={lugar.id} 
+             lugar={lugar} 
+             onActualizarLugar={(data) => fetchLugar(lugar.id)} 
           />
+
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -245,17 +233,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0f0d0b",
   },
-
   header: {
     height: 200,
     backgroundColor: "#1c1a18",
-    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
   },
- headerImagen: {
-  width: "100%",
-  height: "100%",
-  position: "absolute",
-},
   backBtn: {
     position: "absolute",
     top: 16,
@@ -266,9 +250,15 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.4)",
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 10
   },
-
+  headerImagen: {
+    width: 90,
+    height: 90,
+    borderRadius: 20,
+    backgroundColor: "#2a2520",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   body: {
     paddingHorizontal: 24,
     paddingTop: 20,
@@ -335,6 +325,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#3a3530",
   },
+<<<<<<< HEAD
   imagen: {
     width: "100%",
     height: 200,
@@ -360,3 +351,6 @@ botonTexto: {
   fontWeight: "600",
 },
 });
+=======
+});
+>>>>>>> parent of 3084883 (Hice cambios en lugar, home y lugarContext)

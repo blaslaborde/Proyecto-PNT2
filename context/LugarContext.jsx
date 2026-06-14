@@ -5,9 +5,7 @@ const LugarContext = createContext(null);
 export const useLugar = () => useContext(LugarContext);
 
 export function LugarProvider({ children }) {
-    const [lugar, setLugar] = useState(null);
-    const [cantGuardados, setCantGuardados] = useState(0);
-    const [cantVisitados, setCantVisitados] = useState(0);
+   const [lugar, setLugar] = useState(null);
 
    const fetchLugar = async (id) => {
     try {
@@ -20,7 +18,7 @@ export function LugarProvider({ children }) {
   };
 
   return (
-    <LugarContext.Provider value={{ lugar,fetchLugar,cantGuardados,setCantGuardados,cantVisitados,setCantVisitados}}>
+    <LugarContext.Provider value={{ lugar,fetchLugar}}>
       {children}
     </LugarContext.Provider>
   );

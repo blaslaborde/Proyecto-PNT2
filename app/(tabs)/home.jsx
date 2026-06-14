@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Image, ScrollView,StyleSheet,Text,TouchableOpacity,View,} from "react-native";
+import {ScrollView,StyleSheet,Text,TouchableOpacity,View,} from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -50,9 +50,9 @@ export default function home() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Los mejores lugares por tu Zona</Text>
           {lugares.map((lugar) => (
-            <TouchableOpacity key={lugar.id} style={styles.card} onPress={async () => { await fetchLugar(lugar.id); router.replace("/lugar")}}>
+            <TouchableOpacity key={lugar.id} style={styles.card} onPress={async () => { await fetchLugar(lugar.id); router.push("/lugar")}}>
               <View style={styles.cardImagen}>
-                  <Image source={{ uri: lugar.fotos[0] }} style={styles.headerImagen} resizeMode="cover"/>     
+                  <Ionicons name="restaurant-outline" size={28} color="#F97316" />
               </View>
               <View style={styles.cardInfo}>
                 <Text style={styles.cardNombre}>{lugar.nombre}</Text>
@@ -62,7 +62,7 @@ export default function home() {
                 <View style={styles.cardPuntaje}>
                   {lugar.esTopRanked ? (<Ionicons name="star" size={14} color="#FFD700"/>) : (<Ionicons name="star" size={14} color="#F97316" />) }
                   <Text style={[styles.cardPuntajeText, { color: lugar.esTopRanked ? "#FFD700" : "#F97316" }]}>
-                    {lugar.puntuacion.toFixed(1)}
+                    {(lugar.totalPuntuacion / lugar.cantResenias).toFixed(1)}
                   </Text>
                 </View>
               </View>
@@ -177,13 +177,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "500",
   },
-  headerImagen: {
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-  },
-  imagen: {
-    width: "100%",
-    height: 200,
-  }
 });
