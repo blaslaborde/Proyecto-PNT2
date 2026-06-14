@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useAuth } from '../../context/AuthContext'
 import { useRouter } from 'expo-router'
@@ -10,6 +10,7 @@ export default function profile() {
   const router = useRouter()  
   const {user,logOut} = useAuth()
   const { misResenias, traerMisResenias } = useResenias()
+  const { mislugaresGuardados, setMislugaresGuardados } = useState([])
 
   useEffect(() => {
     if (user?.id) {
@@ -18,9 +19,9 @@ export default function profile() {
   }, [user]);
 
   const stats = [
-    { num: misResenias.length, label: 'Reseñas' },
-    { num: 8,  label: 'Guardados' },
-    { num: 3,  label: 'Visitas' },
+    { num: misResenias.length, label: 'Reseñas'},
+    { num: 0, label: 'Guardados',},
+    { num: 3,  label: 'Visitas'},
   ];
 
   return (
@@ -40,10 +41,19 @@ export default function profile() {
 
         <View style={styles.statsRow}>
           {stats.map((s) => (
+            s.route ? (
+              <TouchableOpacity key={s.label} style={styles.statCard}
+              activeOpacity={0.7}
+              onPress={() => router.push(s.route)}>
+
+              <Text style={styles.statNum}>{s.num}</Text>
+              <Text style={styles.statLabel}>{s.label}</Text>
+              </TouchableOpacity>) : (
+
             <View key={s.label} style={styles.statCard}>
               <Text style={styles.statNum}>{s.num}</Text>
               <Text style={styles.statLabel}>{s.label}</Text>
-            </View>
+            </View>)
           ))}
         </View>
 
@@ -63,17 +73,23 @@ export default function profile() {
 
           <View style={styles.divider} />
 
-          <TouchableOpacity style={styles.menuItem}>
-            <View style={[styles.menuIcon, styles.menuIconOrange]}>
-              <Text style={styles.menuIconText}>⊡</Text>
-            </View>
-            <View style={styles.menuText}>
-              <Text style={styles.menuLabel}>Lugares guardados</Text>
-              <Text style={styles.menuSub}>8 lugares en tu lista</Text>
-            </View>
-            <Text style={styles.chevron}>›</Text>
-          </TouchableOpacity>
-        </View>
+<TouchableOpacity
+  style={styles.menuItem}
+  onPress={() => router.push('/mis-lugares-guardados')}
+>
+  <View style={[styles.menuIcon, styles.menuIconOrange]}>
+    <Text style={styles.menuIconText}>⊡</Text>
+  </View>
+
+  <View style={styles.menuText}>
+    <Text style={styles.menuLabel}>Lugares guardados</Text>
+    <Text style={styles.menuSub}>0 lugares en tu lista</Text>
+  </View>
+
+  <Text style={styles.chevron}>›</Text>
+</TouchableOpacity>
+
+</View>
 
         <Text style={styles.sectionTitle}>CUENTA</Text>
         <View style={styles.menuGroup}>
