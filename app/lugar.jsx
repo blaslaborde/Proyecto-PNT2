@@ -10,22 +10,9 @@ import { useLugaresUsuario } from "../context/LugaresUsuarioContext";
 
 export default function Lugar() {
   const router = useRouter();
-<<<<<<< HEAD
   const { lugar, fetchLugar } = useLugar();
   const { user } = useAuth();
   const { traerMisLugares } = useLugaresUsuario();
-
-  useEffect(() => {
-    const fetchLugar = async () => {
-      const response = await fetch(`https://6a161d251b90031f81b0b0c9.mockapi.io/lugares/${lugarSeleccionado}`);
-      const data = await response.json();
-      setLugar(data);
-    };
-
-    if (lugarSeleccionado) {
-      fetchLugar();
-    }
-  }, [lugarSeleccionado]);
 
   const guardarLugar = async () => {
   try {
@@ -134,9 +121,6 @@ const visitarLugar = async () => {
     console.log(error);
   }
 };
-=======
-  const { lugar,fetchLugar } = useLugar();
->>>>>>> parent of 3084883 (Hice cambios en lugar, home y lugarContext)
 
   if (!lugar) return null;
 
@@ -325,7 +309,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#3a3530",
   },
-<<<<<<< HEAD
   imagen: {
     width: "100%",
     height: 200,
@@ -351,6 +334,4 @@ botonTexto: {
   fontWeight: "600",
 },
 });
-=======
-});
->>>>>>> parent of 3084883 (Hice cambios en lugar, home y lugarContext)
+

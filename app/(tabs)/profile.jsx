@@ -5,13 +5,14 @@ import { useRouter } from 'expo-router'
 import { Ionicons } from "@expo/vector-icons"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useResenias } from '../../context/ReseniasContext'
+import { useLugaresUsuario } from '../../context/LugaresUsuarioContext'
 
 
 export default function profile() {
   const router = useRouter()  
   const {user,logOut,eliminarPerfil} = useAuth()
   const { misResenias, traerMisResenias } = useResenias()
-  const { mislugaresGuardados, setMislugaresGuardados } = useState([])
+ const { misLugaresGuardados, traerMisLugares } = useLugaresUsuario()
 
   useEffect(() => {
     if (user?.id) {

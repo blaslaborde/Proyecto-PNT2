@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  SafeAreaView,
   ScrollView,
   View,
   Text,
@@ -8,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useAuth } from "../context/AuthContext";
@@ -15,9 +15,8 @@ import { useLugar } from "../context/LugarContext";
 
 export default function MisLugaresGuardados() {
   const { user } = useAuth();
-  const { setLugarSeleccionado } = useLugar();
+  const { fetchLugar } = useLugar();
   const router = useRouter();
-
   const [lugares, setLugares] = useState([]);
 
   useEffect(() => {
@@ -87,7 +86,7 @@ export default function MisLugaresGuardados() {
             key={lugar.id}
             style={styles.card}
             onPress={() => {
-              setLugarSeleccionado(lugar.id);
+              fetchLugar(lugar.id);
               router.push("/lugar");
             }}
           >
