@@ -21,20 +21,37 @@ export default function home() {
 
   useEffect(() => {
     const fetchLugares = async () => {
-      const response = await fetch("https://6a161d251b90031f81b0b0c9.mockapi.io/lugares");
-      const data = await response.json();
-      setLugares(data);
+      try {
+        const response = await fetch("https://6a161d251b90031f81b0b0c9.mockapi.io/lugares");
+        if (!response.ok) throw new Error("Error en MockAPI");
+        
+        const data = await response.json();
+        setLugares(data);
+      } catch (error) {
+        console.log("Error al cargar los lugares:", error);
+      }
     };
 
     const obtenerUbicacion = async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") return;
-      const { coords } = await Location.getCurrentPositionAsync({});
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json`
-      );
-      const data = await response.json();
-      setBarrio(data.address.suburb);
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") return;
+        
+        const { coords } = await Location.getCurrentPositionAsync({});
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json`,
+          {
+            headers: {
+              "User-Agent": "FoodPicksApp/1.0", // Nominatim requiere un User-Agent explícito
+            },
+          }
+        );
+        if (!response.ok) throw new Error("Nominatim bloqueó o falló la respuesta");
+        const data = await response.json();
+        setBarrio(data.address.suburb || data.address.neighbourhood); // Algunas zonas usan "neighbourhood" en lugar de "suburb"
+      } catch (error) {
+        console.log("Error al obtener la ubicación:", error);
+      }
     };
 
     fetchLugares();

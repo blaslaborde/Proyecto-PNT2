@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -24,16 +25,12 @@ export default function Lugar() {
   const guardarLugar = async () => {
     try {
       const response = await fetch(
-        "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario",
+        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}&lugarId=${lugar.id}`
       );
 
       const relaciones = await response.json();
-
-      const existe = relaciones.find(
-        (r) =>
-          String(r.userId) === String(user.id) &&
-          String(r.lugarId) === String(lugar.id),
-      );
+      
+      const existe = relaciones.length > 0 ? relaciones[0] : null;
 
       if (existe) {
         await fetch(
@@ -69,24 +66,22 @@ export default function Lugar() {
       }
 
       await traerMisLugares(user.id);
+      Alert.alert("¡Listo!", "Lugar guardado exitosamente.");
     } catch (error) {
       console.log(error);
+      Alert.alert("Error", "No se pudo guardar el lugar.");
     }
   };
 
   const visitarLugar = async () => {
     try {
       const response = await fetch(
-        "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario",
+        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}&lugarId=${lugar.id}`
       );
 
       const relaciones = await response.json();
-
-      const existe = relaciones.find(
-        (r) =>
-          String(r.userId) === String(user.id) &&
-          String(r.lugarId) === String(lugar.id),
-      );
+      
+      const existe = relaciones.length > 0 ? relaciones[0] : null;
 
       if (existe) {
         await fetch(
@@ -122,8 +117,10 @@ export default function Lugar() {
       }
 
       await traerMisLugares(user.id);
+      Alert.alert("¡Listo!", "Marcaste este lugar como visitado.");
     } catch (error) {
       console.log(error);
+      Alert.alert("Error", "No se pudo actualizar el estado.");
     }
   };
 
