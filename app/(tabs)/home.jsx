@@ -34,6 +34,11 @@ export default function home() {
     };
 
     const obtenerUbicacion = async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          console.log("Permiso de ubicación denegado");
+          return;
+        }
       const { coords } = await Location.getCurrentPositionAsync({})
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json`,
