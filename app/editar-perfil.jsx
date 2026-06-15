@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useAuth } from "../context/AuthContext";
+import SubirImagenes from "../components/SubirImagenes";
 
 export default function EditarPerfil() {
   const router = useRouter();
@@ -19,11 +21,13 @@ export default function EditarPerfil() {
   const [nombre, setNombre] = useState(user?.name || "");
   const [apellido, setApellido] = useState(user?.lastName || "");
   const [telefono, setTelefono] = useState(user?.telefono || "");
+  const [avatar, setAvatar] = useState(user?.avatar || null);
 
   const guardarCambios = async () => {
     await updateProfile({
       name: nombre,
       lastName: apellido,
+      avatar: avatar,
       telefono: telefono,
       email: user.email,
       password: user.password,
@@ -35,8 +39,6 @@ export default function EditarPerfil() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-
-        {/* HEADER */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()}>
             <Ionicons name="chevron-back" size={26} color="#F97316" />
@@ -44,17 +46,19 @@ export default function EditarPerfil() {
 
           <Text style={styles.title}>Editar perfil</Text>
         </View>
-
-        {/* AVATAR */}
         <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            {user?.name?.charAt(0)?.toUpperCase() || "U"}
-          </Text>
+          {avatar ? (
+            <Image
+              source={{ uri: avatar }}
+              style={{ width: "100%", height: "100%", borderRadius: 999 }}
+            />
+          ) : (
+            <Text style={styles.avatarText}>
+              {user?.avatar?.charAt(0)?.toUpperCase() || "U"}
+            </Text>
+          )}
         </View>
-
-        {/* CARD FORM */}
         <View style={styles.card}>
-
           <Text style={styles.label}>Nombre</Text>
           <TextInput
             style={styles.input}
@@ -63,7 +67,6 @@ export default function EditarPerfil() {
             placeholder="Nombre"
             placeholderTextColor="#777"
           />
-
           <Text style={styles.label}>Apellido</Text>
           <TextInput
             style={styles.input}
@@ -72,7 +75,6 @@ export default function EditarPerfil() {
             placeholder="Apellido"
             placeholderTextColor="#777"
           />
-
           <Text style={styles.label}>Teléfono</Text>
           <TextInput
             style={styles.input}
@@ -82,14 +84,16 @@ export default function EditarPerfil() {
             placeholderTextColor="#777"
             keyboardType="phone-pad"
           />
-
+          <Text style={styles.label}> Cargar imagen </Text>
+          <SubirImagenes
+          foto={avatar}
+          onImageSelected={(uri) => setAvatar(uri)}
+          style={styles.input}
+        />
         </View>
-
-        {/* BOTÓN */}
         <TouchableOpacity style={styles.button} onPress={guardarCambios}>
           <Text style={styles.buttonText}>Guardar cambios</Text>
         </TouchableOpacity>
-
       </ScrollView>
     </SafeAreaView>
   );

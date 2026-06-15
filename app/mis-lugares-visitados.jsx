@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import {
-  SafeAreaView,
   ScrollView,
   View,
   Text,
@@ -9,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useFocusEffect } from "expo-router";
 import { useAuth } from "../context/AuthContext";
 import { useLugar } from "../context/LugarContext";
@@ -163,12 +163,6 @@ const styles = StyleSheet.create({
     color: "#f0ebe5",
     fontSize: 22,
     fontWeight: "600",
-  },
-  card: {
-    backgroundColor: "#1c1a18",
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
   },
   nombre: {
     color: "#f0ebe5",

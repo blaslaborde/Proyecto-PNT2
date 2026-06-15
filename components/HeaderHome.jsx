@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function HeaderHome({ user, filtrarPorUbicacion, setFiltrarPorUbicacion, irAPerfil }) {
@@ -19,9 +19,10 @@ export default function HeaderHome({ user, filtrarPorUbicacion, setFiltrarPorUbi
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={irAPerfil} style={styles.avatarBtn}>
-          <Text style={styles.avatarText}>
-            {user?.name?.charAt(0)?.toUpperCase() || "U"}
-          </Text>
+          {user?.avatar 
+            ? <Image source={{ uri: user.avatar }} style={{ width: '100%', height: '100%', borderRadius: 999 }} />
+            : <Text style={styles.avatarText}>{user?.avatar?.charAt(0)?.toUpperCase() || "U"}</Text>
+          }
         </TouchableOpacity>
       </View>
     </View>

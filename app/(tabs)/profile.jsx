@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import {
   Alert,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -55,10 +56,11 @@ export default function profile() {
       >
         <View style={styles.header}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {user?.name?.charAt(0).toUpperCase() ?? "U"}
-            </Text>
-          </View>
+          {user?.avatar 
+            ? <Image source={{ uri: user.avatar }} style={{ width: 62, height: 62, borderRadius: 31 }} />
+            : <Text style={styles.avatarText}>{user?.name?.charAt(0).toUpperCase() ?? "U"}</Text>
+          }
+        </View>
           <View style={styles.userInfo}>
             <Text style={styles.userName}>{user?.name ?? "Usuario"}</Text>
             <Text style={styles.userEmail}>{user?.email ?? ""}</Text>
@@ -127,7 +129,7 @@ export default function profile() {
             onPress={() => router.push("/mis-lugares-visitados")}
           >
             <View style={[styles.menuIcon, styles.menuIconOrange]}>
-              <Ionicons name="bookmark" size={18} color="#F97316" />
+              <Ionicons name="restaurant" size={18} color="#F97316" />
             </View>
             <View style={styles.menuText}>
               <Text style={styles.menuLabel}>Lugares visitados</Text>

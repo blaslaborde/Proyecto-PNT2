@@ -148,33 +148,15 @@ export default function Lugar() {
 
         <View style={styles.body}>
           <Text style={styles.nombre}>{lugar.nombre}</Text>
-          <Text style={styles.meta}>
-            {lugar.categoria} · {lugar.barrio}
-          </Text>
-          <Text style={styles.direccion}>{lugar.direccion}</Text>
+          
+          <View style={styles.divider} />
 
-          <View style={styles.botonesContainer}>
-            <TouchableOpacity style={styles.botonAccion} onPress={guardarLugar}>
-              <Text style={styles.botonTexto}>Guardar restaurante</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.botonAccion} onPress={visitarLugar}>
-              <Text style={styles.botonTexto}>Marcar como visitado</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.statsRow}>
-            <View style={styles.statItem}>
-              <Text style={styles.statVal}>
-                {lugar.cantResenias > 0 ? lugar.puntuacion.toFixed(1) : "-"}
-              </Text>
-              <Text style={styles.statLbl}>Rating</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statVal}>{lugar.cantResenias}</Text>
-              <Text style={styles.statLbl}>Reseñas</Text>
-            </View>
+          <View>
+            <Text style={styles.subtext}>Datos sobre el lugar:</Text>
+            <Text style={styles.meta}>
+              {lugar.categoria} · {lugar.barrio}
+            </Text>
+            <Text style={styles.direccion}>{lugar.direccion}</Text>
           </View>
 
           <View style={styles.section}>
@@ -211,6 +193,32 @@ export default function Lugar() {
               <Text style={styles.empty}>Sin fotos cargadas</Text>
             )}
           </View>
+            <View style={styles.botonesContainer}>
+              <TouchableOpacity style={styles.botonAccion} onPress={guardarLugar}>
+                <Text style={styles.botonTexto}>Guardar restaurante</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.botonAccion} onPress={visitarLugar}>
+                <Text style={styles.botonTexto}>Marcar como visitado</Text>
+              </TouchableOpacity>
+          </View>
+
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <Text style={styles.statVal}>
+                {lugar.cantResenias > 0 ? lugar.puntuacion.toFixed(1) : "-"}
+              </Text>
+              <Text style={styles.statLbl}>Rating</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statVal}>{lugar.cantResenias}</Text>
+              <Text style={styles.statLbl}>Reseñas</Text>
+            </View>
+          </View>
+
+
+
           <ReseniasList
             lugarId={lugar.id}
             lugar={lugar}
@@ -321,7 +329,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
   },
-
   botonesContainer: {
     flexDirection: "row",
     gap: 10,
@@ -350,4 +357,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 10,
   },
+  subtext: {
+  color: "#7a6f66",
+  fontSize: 16,
+  marginTop: 6,
+  letterSpacing: 0.8,
+  },
+  divider: {
+  height: 1,
+  backgroundColor: "#2e2c2a",
+  marginVertical: 10,
+  }
 });
