@@ -126,6 +126,7 @@ export function AuthProvider({children}){
 
     const userActualizado = await response.json();
     setUser(userActualizado);
+    AsyncStorage.setItem("user", JSON.stringify(userActualizado));
   } catch (e) {
     setError("Error al actualizar perfil");
   }

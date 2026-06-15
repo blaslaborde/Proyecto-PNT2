@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {ScrollView,StyleSheet,Text,TouchableOpacity,View,} from "react-native";
+import {Image, ScrollView,StyleSheet,Text,TouchableOpacity,View,} from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -43,7 +43,7 @@ export default function home() {
           </View>
           <TouchableOpacity onPress={irAPerfil} style={styles.avatarBtn}>
             <Text style={styles.avatarText}>
-              {user.name?.charAt(0).toUpperCase()}
+              {user?.name?.charAt(0)?.toUpperCase() || "U"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -52,7 +52,7 @@ export default function home() {
           {lugares.map((lugar) => (
             <TouchableOpacity key={lugar.id} style={styles.card} onPress={async () => { await fetchLugar(lugar.id); router.replace("/lugar")}}>
               <View style={styles.cardImagen}>
-                  <Ionicons name="restaurant-outline" size={28} color="#F97316" />
+                  <Image source={{ uri: lugar.fotos[0] }} style={styles.headerImagen} resizeMode="cover"/>     
               </View>
               <View style={styles.cardInfo}>
                 <Text style={styles.cardNombre}>{lugar.nombre}</Text>
@@ -177,4 +177,13 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "500",
   },
+  headerImagen: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+  },
+  imagen: {
+    width: "100%",
+    height: 200,
+  }
 });

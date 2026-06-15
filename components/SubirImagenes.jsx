@@ -22,7 +22,7 @@ export default function SubirImagenes({ foto, onImageSelected }) {
       return;
     }
     const resultado = await ImagePicker.launchCameraAsync({ 
-      quality: 0.5, mediaTypes: ImagePicker.MediaTypeOptions.Images, allowsEditing: true 
+      quality: 0.5, allowsEditing: true 
     });
     if (!resultado.canceled) {
       onImageSelected(resultado.assets[0].uri);

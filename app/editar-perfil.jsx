@@ -48,7 +48,7 @@ export default function EditarPerfil() {
         {/* AVATAR */}
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>
-            {user?.name?.charAt(0).toUpperCase() || "U"}
+            {user?.name?.charAt(0)?.toUpperCase() || "U"}
           </Text>
         </View>
 
