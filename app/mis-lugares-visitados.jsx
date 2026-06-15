@@ -14,7 +14,7 @@ import { useLugar } from "../context/LugarContext";
 
 export default function MisLugaresVisitados() {
   const { user } = useAuth();
-  const { setLugarSeleccionado } = useLugar();
+  const { fetchLugar } = useLugar();
   const router = useRouter();
 
   const [lugares, setLugares] = useState([]);
@@ -86,7 +86,7 @@ export default function MisLugaresVisitados() {
             key={lugar.id}
             style={styles.card}
             onPress={() => {
-              setLugarSeleccionado(lugar.id);
+              fetchLugar(lugar.id);
               router.push("/lugar");
             }}
           >
