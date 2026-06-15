@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {Image, ScrollView,StyleSheet,Text,TouchableOpacity,View,} from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useLugar } from "../../context/LugarContext";
-
+import * as Location from "expo-location";
 
 export default function home() {
   const router = useRouter();
@@ -13,6 +20,8 @@ export default function home() {
   const [lugares, setLugares] = useState([]);
   const { setLugarSeleccionado } = useLugar();
   const { fetchLugar } = useLugar();
+  const [barrio, setBarrio] = useState(null);
+  const [filtrarPorUbicacion, setFiltrarPorUbicacion] = useState(false);
 
   useEffect(() => {
     const fetchLugares = async () => {
@@ -24,8 +33,34 @@ export default function home() {
       console.log(lugar);
     };
 
+    const obtenerUbicacion = async () => {
+      const { coords } = await Location.getCurrentPositionAsync({})
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json`,
+      );
+      const data = await response.json();
+
+      console.log(data.address);
+
+      const barrio = data.address.suburb;
+      setBarrio(barrio);
+    };
     fetchLugares();
+    obtenerUbicacion();
   }, []);
+
+  const normalizar = (str) =>
+    str
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+  const lugaresFiltrados =
+    filtrarPorUbicacion && barrio
+      ? lugares.filter(
+          (lugar) => normalizar(lugar.barrio) === normalizar(barrio),
+        )
+      : lugares;
 
   if (!user) return null;
 
@@ -41,33 +76,70 @@ export default function home() {
             <Text style={styles.greeting}>¡Hola, {user.name}! 👋</Text>
             <Text style={styles.subtitle}>¿A donde vas a ir hoy?</Text>
           </View>
-          <TouchableOpacity onPress={irAPerfil} style={styles.avatarBtn}>
-            <Text style={styles.avatarText}>
-              {user?.name?.charAt(0)?.toUpperCase() || "U"}
-            </Text>
-          </TouchableOpacity>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <TouchableOpacity
+                onPress={() => setFiltrarPorUbicacion(!filtrarPorUbicacion)}
+                style={[styles.filtroBtn, filtrarPorUbicacion && styles.filtroBtnActivo]}
+            >
+                <Ionicons name="location" size={16} color={filtrarPorUbicacion ? "#121212" : "#F97316"} />
+                <Text style={{ color: filtrarPorUbicacion ? "#121212" : "#F97316" }}>
+                    {filtrarPorUbicacion ? "Mi zona" : "Todos"}
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={irAPerfil} style={styles.avatarBtn}>
+              <Text style={styles.avatarText}>
+                {user?.name?.charAt(0)?.toUpperCase() || "U"}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Los mejores lugares por tu Zona</Text>
-          {lugares.map((lugar) => (
-            <TouchableOpacity key={lugar.id} style={styles.card} onPress={async () => { await fetchLugar(lugar.id); router.replace("/lugar")}}>
-              <View style={styles.cardImagen}>
-                  <Image source={{ uri: lugar.fotos[0] }} style={styles.headerImagen} resizeMode="cover"/>     
-              </View>
-              <View style={styles.cardInfo}>
-                <Text style={styles.cardNombre}>{lugar.nombre}</Text>
-                <Text style={styles.cardCategoria}>
-                  {lugar.categoria} · {lugar.direccion}
-                </Text>
-                <View style={styles.cardPuntaje}>
-                  {lugar.esTopRanked ? (<Ionicons name="star" size={14} color="#FFD700"/>) : (<Ionicons name="star" size={14} color="#F97316" />) }
-                  <Text style={[styles.cardPuntajeText, { color: lugar.esTopRanked ? "#FFD700" : "#F97316" }]}>
-                    {lugar.puntuacion.toFixed(1)}
-                  </Text>
+          <Text style={styles.sectionTitle}>
+            Los mejores lugares por tu Zona
+          </Text>
+          {lugaresFiltrados.length === 0 ? (
+            <Text style={{ color: "#f0ebe5" }}>No hay lugares en tu zona</Text>
+          ) : (
+            lugaresFiltrados.map((lugar) => (
+              <TouchableOpacity
+                key={lugar.id}
+                style={styles.card}
+                onPress={async () => {
+                  await fetchLugar(lugar.id);
+                  router.replace("/lugar");
+                }}
+              >
+                <View style={styles.cardImagen}>
+                  <Image
+                    source={{ uri: lugar.fotos[0] }}
+                    style={styles.headerImagen}
+                    resizeMode="cover"
+                  />
                 </View>
-              </View>
-            </TouchableOpacity>
-          ))}
+                <View style={styles.cardInfo}>
+                  <Text style={styles.cardNombre}>{lugar.nombre}</Text>
+                  <Text style={styles.cardCategoria}>
+                    {lugar.categoria} · {lugar.direccion}
+                  </Text>
+                  <View style={styles.cardPuntaje}>
+                    {lugar.esTopRanked ? (
+                      <Ionicons name="star" size={14} color="#FFD700" />
+                    ) : (
+                      <Ionicons name="star" size={14} color="#F97316" />
+                    )}
+                    <Text
+                      style={[
+                        styles.cardPuntajeText,
+                        { color: lugar.esTopRanked ? "#FFD700" : "#F97316" },
+                      ]}
+                    >
+                      {lugar.puntuacion.toFixed(1)}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -185,5 +257,18 @@ const styles = StyleSheet.create({
   imagen: {
     width: "100%",
     height: 200,
-  }
+  },
+  filtroBtn: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+      borderWidth: 1,
+      borderColor: "#F97316",
+      borderRadius: 20,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+  },
+  filtroBtnActivo: {
+    backgroundColor: "#F97316",
+  },
 });

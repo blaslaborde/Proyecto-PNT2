@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useLugar } from "../context/LugarContext";
@@ -15,159 +22,151 @@ export default function Lugar() {
   const { traerMisLugares } = useLugaresUsuario();
 
   const guardarLugar = async () => {
-  try {
-    const response = await fetch(
-      "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario"
-    );
-
-    const relaciones = await response.json();
-
-    const existe = relaciones.some(
-  (r) =>
-    String(r.userId) === String(user.id) &&
-    String(r.lugarId) === String(lugar.id)
-);
-
-    if (existe) {
-      await fetch(
-        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario/${relacionExistente.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...relacionExistente,
-            guardado: true,
-          }),
-        }
-      );
-    } else {
-      await fetch(
+    try {
+      const response = await fetch(
         "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            lugarId: lugar.id,
-            userId: user.id,
-            guardado: true,
-            visitado: false,
-            favorito: false,
-          }),
-        }
       );
+
+      const relaciones = await response.json();
+
+      const existe = relaciones.some(
+        (r) =>
+          String(r.userId) === String(user.id) &&
+          String(r.lugarId) === String(lugar.id),
+      );
+
+      if (existe) {
+        await fetch(
+          `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario/${relacionExistente.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...relacionExistente,
+              guardado: true,
+            }),
+          },
+        );
+      } else {
+        await fetch(
+          "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              lugarId: lugar.id,
+              userId: user.id,
+              guardado: true,
+              visitado: false,
+              favorito: false,
+            }),
+          },
+        );
+      }
+
+      await traerMisLugares(user.id);
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    await traerMisLugares(user.id);
-
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const visitarLugar = async () => {
-  try {
-    const response = await fetch(
-      "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario"
-    );
-
-    const relaciones = await response.json();
-
-    const existe = relaciones.some(
-  (r) =>
-    String(r.userId) === String(user.id) &&
-    String(r.lugarId) === String(lugar.id)
-);
-
-    if (existe) {
-      await fetch(
-        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario/${relacionExistente.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...relacionExistente,
-            visitado: true,
-          }),
-        }
-      );
-    } else {
-      await fetch(
+  const visitarLugar = async () => {
+    try {
+      const response = await fetch(
         "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            lugarId: lugar.id,
-            userId: user.id,
-            guardado: false,
-            visitado: true,
-            favorito: false,
-          }),
-        }
       );
+
+      const relaciones = await response.json();
+
+      const existe = relaciones.some(
+        (r) =>
+          String(r.userId) === String(user.id) &&
+          String(r.lugarId) === String(lugar.id),
+      );
+
+      if (existe) {
+        await fetch(
+          `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario/${relacionExistente.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...relacionExistente,
+              visitado: true,
+            }),
+          },
+        );
+      } else {
+        await fetch(
+          "https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              lugarId: lugar.id,
+              userId: user.id,
+              guardado: false,
+              visitado: true,
+              favorito: false,
+            }),
+          },
+        );
+      }
+
+      await traerMisLugares(user.id);
+    } catch (error) {
+      console.log(error);
     }
-
-    await traerMisLugares(user.id);
-
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
   if (!lugar) return null;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#0f0d0b" }}>
       <ScrollView style={styles.container}>
-
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.replace("/(tabs)/home")} style={styles.backBtn}>
+          <TouchableOpacity
+            onPress={() => router.replace("/(tabs)/home")}
+            style={styles.backBtn}
+          >
             <Ionicons name="chevron-back" size={22} color="#f0ebe5" />
           </TouchableOpacity>
-          <View style={styles.headerImagen}>
-            <Ionicons name="restaurant-outline" size={48} color="#F97316" />
-          </View>
+          <Image
+            source={{ uri: lugar.fotos[1] }}
+            style={styles.headerImagen}
+            resizeMode="cover"
+          />
         </View>
 
         <View style={styles.body}>
           <Text style={styles.nombre}>{lugar.nombre}</Text>
-          <Text style={styles.meta}>{lugar.categoria} · {lugar.barrio}</Text>
+          <Text style={styles.meta}>
+            {lugar.categoria} · {lugar.barrio}
+          </Text>
           <Text style={styles.direccion}>{lugar.direccion}</Text>
 
           <View style={styles.botonesContainer}>
-  <TouchableOpacity
-    style={styles.botonAccion}
-    onPress={guardarLugar}
-  >
-    <Text style={styles.botonTexto}>
-      Guardar
-    </Text>
-  </TouchableOpacity>
+            <TouchableOpacity style={styles.botonAccion} onPress={guardarLugar}>
+              <Text style={styles.botonTexto}>Guardar</Text>
+            </TouchableOpacity>
 
-  <TouchableOpacity
-    style={styles.botonAccion}
-    onPress={visitarLugar}
-  >
-    <Text style={styles.botonTexto}>
-      Visitado
-    </Text>
-  </TouchableOpacity>
-</View>
+            <TouchableOpacity style={styles.botonAccion} onPress={visitarLugar}>
+              <Text style={styles.botonTexto}>Visitado</Text>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
               <Text style={styles.statVal}>
-                {lugar.cantResenias > 0
-                  ? lugar.puntuacion.toFixed(1)
-                  : "-"}
+                {lugar.cantResenias > 0 ? lugar.puntuacion.toFixed(1) : "-"}
               </Text>
               <Text style={styles.statLbl}>Rating</Text>
             </View>
@@ -182,7 +181,9 @@ const visitarLugar = async () => {
             <Text style={styles.sectionTitle}>Redes Sociales</Text>
             {lugar.redesSociales?.length > 0 ? (
               lugar.redesSociales.map((red, index) => (
-                <Text key={index} style={styles.redSocial}>· {red}</Text>
+                <Text key={index} style={styles.redSocial}>
+                  · {red}
+                </Text>
               ))
             ) : (
               <Text style={styles.empty}>Sin redes sociales cargadas</Text>
@@ -192,20 +193,29 @@ const visitarLugar = async () => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Fotos</Text>
             {lugar.fotos?.length > 0 ? (
-              lugar.fotos.map((foto, index) => (
-                <Text key={index} style={styles.redSocial}>· {foto}</Text>
-              ))
+              <ScrollView
+                horizontal 
+                showsHorizontalScrollIndicator={false}
+                style={styles.carrusel}
+              >
+                {lugar.fotos.map((foto, index) => (
+                  <Image
+                    key={index}
+                    source={{ uri: foto }}
+                    style={styles.fotoCarrusel}
+                    resizeMode="cover"
+                  />
+                ))}
+              </ScrollView>
             ) : (
               <Text style={styles.empty}>Sin fotos cargadas</Text>
             )}
           </View>
-
-          <ReseniasList 
-             lugarId={lugar.id} 
-             lugar={lugar} 
-             onActualizarLugar={(data) => fetchLugar(lugar.id)} 
+          <ReseniasList
+            lugarId={lugar.id}
+            lugar={lugar}
+            onActualizarLugar={(data) => fetchLugar(lugar.id)}
           />
-
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -234,14 +244,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.4)",
     alignItems: "center",
     justifyContent: "center",
+    zIndex: 10,
   },
   headerImagen: {
-    width: 90,
-    height: 90,
-    borderRadius: 20,
-    backgroundColor: "#2a2520",
-    alignItems: "center",
-    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+    position: "absolute",
   },
   body: {
     paddingHorizontal: 24,
@@ -314,24 +322,32 @@ const styles = StyleSheet.create({
     height: 200,
   },
 
-botonesContainer: {
-  flexDirection: "row",
-  gap: 10,
-  marginBottom: 24,
-},
-botonAccion: {
-  flex: 1,
-  backgroundColor: "#252525",
-  borderWidth: 0.5,
-  borderColor: "rgba(255,255,255,0.07)",
-  borderRadius: 12,
-  paddingVertical: 14,
-  alignItems: "center",
-},
-botonTexto: {
-  color: "#F97316",
-  fontSize: 14,
-  fontWeight: "600",
-},
+  botonesContainer: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 24,
+  },
+  botonAccion: {
+    flex: 1,
+    backgroundColor: "#252525",
+    borderWidth: 0.5,
+    borderColor: "rgba(255,255,255,0.07)",
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: "center",
+  },
+  botonTexto: {
+    color: "#F97316",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  carrusel: {
+  marginBottom: 16,
+  },
+  fotoCarrusel: {
+    width: 200,
+    height: 150,
+    borderRadius: 10,
+    marginRight: 10,
+  },
 });
-
