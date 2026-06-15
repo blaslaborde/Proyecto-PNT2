@@ -58,7 +58,8 @@ export function ReseniasProvider({ children }) {
          body: JSON.stringify({
             totalPuntuacion: nuevosTotalPuntuacion,
             cantResenias: nuevasCantResenias,
-            puntuacion:nuevaPuntuacionFinal
+            puntuacion:nuevaPuntuacionFinal,
+            esTopRanked: nuevaPuntuacionFinal >= 4
          })
       });
       
@@ -89,7 +90,8 @@ export function ReseniasProvider({ children }) {
          body: JSON.stringify({
             totalPuntuacion: nuevosTotalPuntuacion,
             cantResenias: nuevasCantResenias,
-            puntuacion: nuevaPuntuacionFinal
+            puntuacion: nuevaPuntuacionFinal,
+            esTopRanked: nuevaPuntuacionFinal >= 4
          })
       });
     } catch (error) {
@@ -120,7 +122,8 @@ export function ReseniasProvider({ children }) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               totalPuntuacion: nuevosTotalPuntuacion,
-              puntuacion: nuevaPuntuacionFinal
+              puntuacion: nuevaPuntuacionFinal,
+              esTopRanked: nuevaPuntuacionFinal >= 4
             })
           }
         }
