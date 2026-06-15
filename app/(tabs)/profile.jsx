@@ -33,6 +33,17 @@ export default function profile() {
     { num: misLugaresVisitados.length, label: "Visitas" },
   ];
 
+  const confirmarEliminar = () => {
+    Alert.alert(
+        "Eliminar perfil",
+        "¿Estás seguro que querés eliminar tu perfil?",
+        [
+            { text: "Cancelar", style: "cancel" },
+            { text: "Eliminar", style: "destructive", onPress: () => eliminarPerfil(user.id) }
+        ]
+    );
+};
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#121212" }}>
       <ScrollView
@@ -166,7 +177,7 @@ export default function profile() {
 
         <TouchableOpacity
           style={styles.deleteBtn}
-          onPress={() => eliminarPerfil(user.id)}
+          onPress={confirmarEliminar}
         >
           <Ionicons name="trash-outline" size={18} color="#fff" />
           <Text style={styles.deleteBtnText}>Eliminar cuenta</Text>
