@@ -29,7 +29,7 @@ export default function Lugar() {
 
       const relaciones = await response.json();
 
-      const existe = relaciones.some(
+      const existe = relaciones.find(
         (r) =>
           String(r.userId) === String(user.id) &&
           String(r.lugarId) === String(lugar.id),
@@ -37,14 +37,14 @@ export default function Lugar() {
 
       if (existe) {
         await fetch(
-          `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario/${relacionExistente.id}`,
+          `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario/${existe.id}`,
           {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              ...relacionExistente,
+              ...existe,
               guardado: true,
             }),
           },
@@ -82,7 +82,7 @@ export default function Lugar() {
 
       const relaciones = await response.json();
 
-      const existe = relaciones.some(
+      const existe = relaciones.find(
         (r) =>
           String(r.userId) === String(user.id) &&
           String(r.lugarId) === String(lugar.id),
@@ -90,14 +90,14 @@ export default function Lugar() {
 
       if (existe) {
         await fetch(
-          `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario/${relacionExistente.id}`,
+          `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario/${existe.id}`,
           {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              ...relacionExistente,
+              ...existe,
               visitado: true,
             }),
           },
@@ -155,11 +155,11 @@ export default function Lugar() {
 
           <View style={styles.botonesContainer}>
             <TouchableOpacity style={styles.botonAccion} onPress={guardarLugar}>
-              <Text style={styles.botonTexto}>Guardar</Text>
+              <Text style={styles.botonTexto}>Guardar restaurante</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.botonAccion} onPress={visitarLugar}>
-              <Text style={styles.botonTexto}>Visitado</Text>
+              <Text style={styles.botonTexto}>Marcar como visitado</Text>
             </TouchableOpacity>
           </View>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { useAuth } from "../../context/AuthContext";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useResenias } from "../../context/ReseniasContext";
@@ -18,15 +18,17 @@ export default function profile() {
   const router = useRouter();
   const { user, logOut, eliminarPerfil } = useAuth();
   const { misResenias, traerMisResenias } = useResenias();
-  const { misLugaresGuardados, traerMisLugares } = useLugaresUsuario();
-  const { misLugaresVisitados, traerMisLugaresVisitados } = useLugaresUsuario();
+  const { misLugaresGuardados, misLugaresVisitados, traerMisLugares } = useLugaresUsuario();
+  
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
     if (user?.id) {
       traerMisResenias(user.id);
       traerMisLugares(user.id);
     }
-  }, [user]);
+  }, [user])
+);
 
   const stats = [
     { num: misResenias.length, label: "Reseñas" },
