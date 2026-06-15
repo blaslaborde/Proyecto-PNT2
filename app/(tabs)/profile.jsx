@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useAuth } from '../../context/AuthContext'
-import { useRouter } from 'expo-router'
-import { Ionicons } from "@expo/vector-icons"
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useResenias } from '../../context/ReseniasContext'
-import { useLugaresUsuario } from '../../context/LugaresUsuarioContext'
-
+import React, { useEffect, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useAuth } from "../../context/AuthContext";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useResenias } from "../../context/ReseniasContext";
+import { useLugaresUsuario } from "../../context/LugaresUsuarioContext";
 
 export default function profile() {
-  const router = useRouter()  
-  const {user,logOut,eliminarPerfil} = useAuth()
-  const { misResenias, traerMisResenias } = useResenias()
- const { misLugaresGuardados, traerMisLugares } = useLugaresUsuario()
+  const router = useRouter();
+  const { user, logOut, eliminarPerfil } = useAuth();
+  const { misResenias, traerMisResenias } = useResenias();
+  const { misLugaresGuardados, traerMisLugares } = useLugaresUsuario();
+  const { misLugaresVisitados, traerMisLugaresVisitados } = useLugaresUsuario();
 
   useEffect(() => {
     if (user?.id) {
@@ -22,54 +28,64 @@ export default function profile() {
   }, [user]);
 
   const stats = [
-    { num: misResenias.length, label: 'Reseñas'},
-    { num: 0, label: 'Guardados',},
-    { num: 3,  label: 'Visitas'},
+    { num: misResenias.length, label: "Reseñas" },
+    { num: misLugaresGuardados.length, label: "Guardados" },
+    { num: misLugaresVisitados.length, label: "Visitas" },
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#121212' }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#121212" }}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+      >
         <View style={styles.header}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
-              {user?.name?.charAt(0).toUpperCase() ?? 'U'}
+              {user?.name?.charAt(0).toUpperCase() ?? "U"}
             </Text>
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user?.name ?? 'Usuario'}</Text>
-            <Text style={styles.userEmail}>{user?.email ?? ''}</Text>
+            <Text style={styles.userName}>{user?.name ?? "Usuario"}</Text>
+            <Text style={styles.userEmail}>{user?.email ?? ""}</Text>
           </View>
         </View>
 
         <View style={styles.statsRow}>
-          {stats.map((s) => (
+          {stats.map((s) =>
             s.route ? (
-              <TouchableOpacity key={s.label} style={styles.statCard}
-              activeOpacity={0.7}
-              onPress={() => router.push(s.route)}>
-
-              <Text style={styles.statNum}>{s.num}</Text>
-              <Text style={styles.statLabel}>{s.label}</Text>
-              </TouchableOpacity>) : (
-
-            <View key={s.label} style={styles.statCard}>
-              <Text style={styles.statNum}>{s.num}</Text>
-              <Text style={styles.statLabel}>{s.label}</Text>
-            </View>)
-          ))}
+              <TouchableOpacity
+                key={s.label}
+                style={styles.statCard}
+                activeOpacity={0.7}
+                onPress={() => router.push(s.route)}
+              >
+                <Text style={styles.statNum}>{s.num}</Text>
+                <Text style={styles.statLabel}>{s.label}</Text>
+              </TouchableOpacity>
+            ) : (
+              <View key={s.label} style={styles.statCard}>
+                <Text style={styles.statNum}>{s.num}</Text>
+                <Text style={styles.statLabel}>{s.label}</Text>
+              </View>
+            ),
+          )}
         </View>
 
-      
         <Text style={styles.sectionTitle}>MI ACTIVIDAD</Text>
         <View style={styles.menuGroup}>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/mis-resenias')}>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => router.push("/mis-resenias")}
+          >
             <View style={[styles.menuIcon, styles.menuIconOrange]}>
               <Ionicons name="star" size={18} color="#F97316" />
             </View>
             <View style={styles.menuText}>
               <Text style={styles.menuLabel}>Mis reseñas</Text>
-              <Text style={styles.menuSub}>{misResenias.length} reseña(s) publicadas</Text>
+              <Text style={styles.menuSub}>
+                {misResenias.length} reseña(s) publicadas
+              </Text>
             </View>
             <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
           </TouchableOpacity>
@@ -77,38 +93,62 @@ export default function profile() {
           <View style={styles.divider} />
           <TouchableOpacity
             style={styles.menuItem}
-            onPress={() => router.push('/mis-lugares-guardados')}
+            onPress={() => router.push("/mis-lugares-guardados")}
           >
             <View style={[styles.menuIcon, styles.menuIconOrange]}>
               <Ionicons name="bookmark" size={18} color="#F97316" />
             </View>
-
-  <View style={styles.menuText}>
-    <Text style={styles.menuLabel}>Lugares guardados</Text>
-    <Text style={styles.menuSub}>0 lugares en tu lista</Text>
-  </View>
-
+            <View style={styles.menuText}>
+              <Text style={styles.menuLabel}>Lugares guardados</Text>
+              <Text style={styles.menuSub}>
+                {misLugaresGuardados.length} lugar(es) guardado(s)
+              </Text>
+            </View>
             <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
           </TouchableOpacity>
-        </View> 
+
+          <View style={styles.divider} />
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => router.push("/mis-lugares-visitados")}
+          >
+            <View style={[styles.menuIcon, styles.menuIconOrange]}>
+              <Ionicons name="bookmark" size={18} color="#F97316" />
+            </View>
+            <View style={styles.menuText}>
+              <Text style={styles.menuLabel}>Lugares visitados</Text>
+              <Text style={styles.menuSub}>
+                {misLugaresVisitados.length} lugar(es) visitado(s)
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
+          </TouchableOpacity>
+        </View>
 
         <Text style={styles.sectionTitle}>CUENTA</Text>
         <View style={styles.menuGroup}>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => router.push("/editar-perfil")}
+          >
             <View style={[styles.menuIcon, styles.menuIconGray]}>
-              <Text style={styles.menuIconText}>✎</Text>
+              <Ionicons name="pencil" size={18} color="#7a6f66" />
             </View>
             <View style={styles.menuText}>
               <Text style={styles.menuLabel}>Editar perfil</Text>
             </View>
-            <Text style={styles.chevron}>›</Text>
+            <Ionicons name="chevron-forward" size={18} color="#7a6f66" />
           </TouchableOpacity>
 
           <View style={styles.divider} />
 
           <TouchableOpacity style={styles.menuItem}>
             <View style={[styles.menuIcon, styles.menuIconGray]}>
-              <Ionicons name="notifications-outline" size={18} color="#7a6f66" />
+              <Ionicons
+                name="notifications-outline"
+                size={18}
+                color="#7a6f66"
+              />
             </View>
             <View style={styles.menuText}>
               <Text style={styles.menuLabel}>Notificaciones</Text>
@@ -117,32 +157,34 @@ export default function profile() {
           </TouchableOpacity>
         </View>
 
-      
-          <TouchableOpacity style={styles.logoutGroup} onPress={logOut}>
-            <View style={styles.logoutIcon}>
-              <Ionicons name="log-out-outline" size={18} color="#7a6f66" />
-            </View>
-            <Text style={styles.logoutLabel}>Cerrar sesión</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.deleteBtn} onPress={() => eliminarPerfil(user.id)}>
-            <Ionicons name="trash-outline" size={18} color="#fff" />
-            <Text style={styles.deleteBtnText}>Eliminar cuenta</Text>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.logoutGroup} onPress={logOut}>
+          <View style={styles.logoutIcon}>
+            <Ionicons name="log-out-outline" size={18} color="#7a6f66" />
+          </View>
+          <Text style={styles.logoutLabel}>Cerrar sesión</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.deleteBtn}
+          onPress={() => eliminarPerfil(user.id)}
+        >
+          <Ionicons name="trash-outline" size={18} color="#fff" />
+          <Text style={styles.deleteBtnText}>Eliminar cuenta</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const ORANGE = '#FF6B00';
-const ORANGE_DIM = 'rgba(255,107,0,0.12)';
-const RED = '#E05252';
-const RED_DIM = 'rgba(220,53,53,0.08)';
-const BG = '#121212';
-const CARD = '#252525';
-const TEXT = '#F0F0F0';
-const MUTED = '#888888';
-const BORDER = 'rgba(255,255,255,0.07)';
+const ORANGE = "#FF6B00";
+const ORANGE_DIM = "rgba(255,107,0,0.12)";
+const RED = "#E05252";
+const RED_DIM = "rgba(220,53,53,0.08)";
+const BG = "#121212";
+const CARD = "#252525";
+const TEXT = "#F0F0F0";
+const MUTED = "#888888";
+const BORDER = "rgba(255,255,255,0.07)";
 const RADIUS = 14;
 
 const styles = StyleSheet.create({
@@ -154,8 +196,8 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 14,
     paddingHorizontal: 20,
     marginBottom: 20,
@@ -165,20 +207,20 @@ const styles = StyleSheet.create({
     height: 62,
     borderRadius: 31,
     backgroundColor: ORANGE,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   avatarText: {
     fontSize: 24,
-    fontWeight: '600',
-    color: '#fff',
+    fontWeight: "600",
+    color: "#fff",
   },
   userInfo: {
     flex: 1,
   },
   userName: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     color: TEXT,
     marginBottom: 2,
   },
@@ -188,7 +230,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   badge: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     backgroundColor: ORANGE_DIM,
     borderRadius: 20,
     paddingHorizontal: 8,
@@ -196,11 +238,11 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     fontSize: 11,
-    fontWeight: '500',
+    fontWeight: "500",
     color: ORANGE,
   },
   statsRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 8,
     paddingHorizontal: 20,
     marginBottom: 24,
@@ -212,11 +254,11 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: BORDER,
     paddingVertical: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
   statNum: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "600",
     color: ORANGE,
   },
   statLabel: {
@@ -226,7 +268,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 11,
-    fontWeight: '500',
+    fontWeight: "500",
     color: MUTED,
     letterSpacing: 1,
     paddingHorizontal: 20,
@@ -239,11 +281,11 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS,
     borderWidth: 0.5,
     borderColor: BORDER,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 14,
     paddingVertical: 14,
     paddingHorizontal: 16,
@@ -252,14 +294,14 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   menuIconOrange: {
     backgroundColor: ORANGE_DIM,
   },
   menuIconGray: {
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: "rgba(255,255,255,0.06)",
   },
   menuIconText: {
     fontSize: 16,
@@ -270,7 +312,7 @@ const styles = StyleSheet.create({
   },
   menuLabel: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
     color: TEXT,
   },
   menuSub: {
@@ -288,15 +330,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   logoutGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 14,
     backgroundColor: RED_DIM,
     marginHorizontal: 16,
     marginBottom: 24,
     borderRadius: RADIUS,
     borderWidth: 0.5,
-    borderColor: 'rgba(220,53,53,0.15)',
+    borderColor: "rgba(220,53,53,0.15)",
     paddingVertical: 14,
     paddingHorizontal: 16,
   },
@@ -304,9 +346,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: 'rgba(220,53,53,0.12)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(220,53,53,0.12)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   logoutIconText: {
     fontSize: 18,
@@ -314,7 +356,7 @@ const styles = StyleSheet.create({
   },
   logoutLabel: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
     color: RED,
   },
   deleteBtn: {
@@ -334,5 +376,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 15,
     fontWeight: "600",
-  }
+  },
 });
