@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Alert } fro
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
 import { useResenias } from "../context/ReseniasContext";
+import SubirImagenes from "./SubirImagenes";
 
 export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
   const { user } = useAuth();
@@ -70,13 +71,9 @@ export default function ReseniasList({ lugarId, lugar, onActualizarLugar }) {
             value={comentario}
             onChangeText={setComentario}
           />
-          <TextInput
-            style={[styles.inputResenia, { minHeight: 40 }]}
-            placeholder="URL de foto (Opcional)"
-            placeholderTextColor="#7a6f66"
-            value={foto}
-            onChangeText={setFoto}
-          />
+          
+          <SubirImagenes foto={foto} onImageSelected={setFoto} />
+
           <View style={styles.formReseniaActions}>
             <TouchableOpacity onPress={() => setEscribiendo(false)} style={styles.btnCancelar}>
               <Text style={styles.btnCancelarText}>Cancelar</Text>

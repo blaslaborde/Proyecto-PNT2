@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useResenias } from "../context/ReseniasContext";
+import SubirImagenes from "../components/SubirImagenes";
 
 export default function MisResenias() {
   const router = useRouter();
@@ -63,13 +64,12 @@ export default function MisResenias() {
                     onChangeText={(txt) => setFormEdit({ ...formEdit, comentario: txt })}
                     multiline
                   />
-                  <TextInput
-                    style={[styles.inputResenia, { minHeight: 40 }]}
-                    placeholder="URL de foto (Opcional)"
-                    placeholderTextColor="#7a6f66"
-                    value={formEdit.foto}
-                    onChangeText={(txt) => setFormEdit({ ...formEdit, foto: txt })}
+
+                  <SubirImagenes 
+                    foto={formEdit.foto} 
+                    onImageSelected={(uri) => setFormEdit({ ...formEdit, foto: uri })} 
                   />
+
                   <View style={styles.actionsRow}>
                     <TouchableOpacity onPress={() => setEditando(null)} style={styles.btnAction}>
                       <Text style={styles.btnActionText}>Cancelar</Text>
