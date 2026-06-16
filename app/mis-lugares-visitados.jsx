@@ -22,7 +22,7 @@ export default function MisLugaresVisitados() {
   const cargarLugares = useCallback(async () => {
     try {
       const responseVisitados = await fetch(
-        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}&visitado=true`
+        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}`
       );
 
         const visitados = await responseVisitados.json();
@@ -54,16 +54,17 @@ export default function MisLugaresVisitados() {
         console.log(error);
       }
     }, [user]);
-  useFocusEffect(
-  useCallback(() => {
-    if (user?.id) cargarLugares();
-  }, [user, cargarLugares])
-);
+   
+    useFocusEffect(
+      useCallback(() => {
+        if (user?.id) cargarLugares();
+      }, [user, cargarLugares])
+    );
 
   const eliminarVisitado = async (lugarId) => {
     try {
       const responseRelaciones = await fetch(
-        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?lugarId=${lugarId}&userId=${user.id}`
+        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}`
       );
       const relaciones = await responseRelaciones.json();
       const relacion = relaciones.find(

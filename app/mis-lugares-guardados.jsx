@@ -23,7 +23,7 @@ export default function MisLugaresGuardados() {
     const cargarLugares = useCallback(async () => {
   try {
     const responseGuardados = await fetch(
-      `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}&guardado=true`
+      `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}`
     );
 
     const guardados = await responseGuardados.json();
@@ -64,7 +64,7 @@ useFocusEffect(
 const eliminarGuardado = async (lugarId) => {
   try {
     const responseRelaciones = await fetch(
-      `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?lugarId=${lugarId}&userId=${user.id}`
+      `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}`
     );
     const relaciones = await responseRelaciones.json();
     const relacion = relaciones.find(

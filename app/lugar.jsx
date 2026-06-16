@@ -25,12 +25,14 @@ export default function Lugar() {
   const guardarLugar = async () => {
     try {
       const response = await fetch(
-        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}&lugarId=${lugar.id}`
+        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}`
       );
 
       const relaciones = await response.json();
       
-      const existe = relaciones.length > 0 ? relaciones[0] : null;
+      const existe = relaciones.find(
+        (r) => String(r.lugarId) === String(lugar.id)
+      ) ?? null;
 
       if (existe) {
         await fetch(
@@ -76,12 +78,14 @@ export default function Lugar() {
   const visitarLugar = async () => {
     try {
       const response = await fetch(
-        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}&lugarId=${lugar.id}`
+        `https://6a28ac664e1e783349a5df43.mockapi.io/lugaresUsuario?userId=${user.id}`
       );
 
       const relaciones = await response.json();
       
-      const existe = relaciones.length > 0 ? relaciones[0] : null;
+      const existe = relaciones.find(
+        (r) => String(r.lugarId) === String(lugar.id)
+      ) ?? null;
 
       if (existe) {
         await fetch(
