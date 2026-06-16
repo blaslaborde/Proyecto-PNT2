@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useResenias } from "../../context/ReseniasContext";
 import { useLugaresUsuario } from "../../context/LugaresUsuarioContext";
 
-export default function profile() {
+export default function Profile() {
   const router = useRouter();
   const { user, logOut, eliminarPerfil } = useAuth();
   const { misResenias, traerMisResenias } = useResenias();
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   userEmail: {
     fontSize: 13,
-    color: MUTED,
+    color: "#888888",
     marginBottom: 6,
   },
   badge: {
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   menuLabel: {
     fontSize: 14,
     fontWeight: "500",
-    color: TEXT,
+    color: "#f0ebe5",
   },
   menuSub: {
     fontSize: 12,
