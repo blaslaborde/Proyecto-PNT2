@@ -1,13 +1,5 @@
 import React, { useCallback, useState } from "react";
-import {
-  Alert,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import {Alert,Image,ScrollView,StyleSheet,Text,TouchableOpacity,View} from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";

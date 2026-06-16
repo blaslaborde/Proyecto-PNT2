@@ -42,13 +42,13 @@ export default function home() {
           `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json`,
           {
             headers: {
-              "User-Agent": "FoodPicksApp/1.0", // Nominatim requiere un User-Agent explícito
+              "User-Agent": "FoodPicksApp/1.0", 
             },
           }
         );
         if (!response.ok) throw new Error("Nominatim bloqueó o falló la respuesta");
         const data = await response.json();
-        setBarrio(data.address.suburb || data.address.neighbourhood); // Algunas zonas usan "neighbourhood" en lugar de "suburb"
+        setBarrio(data.address.suburb || data.address.neighbourhood); 
       } catch (error) {
         console.log("Error al obtener la ubicación:", error);
       }

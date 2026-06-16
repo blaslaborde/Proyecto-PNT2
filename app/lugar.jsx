@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  ScrollView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
+import {ScrollView,View,Text,StyleSheet,TouchableOpacity,Image,Alert} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useLugar } from "../context/LugarContext";
