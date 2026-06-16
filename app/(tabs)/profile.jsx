@@ -184,21 +184,10 @@ export default function profile() {
   );
 }
 
-const ORANGE = "#FF6B00";
-const ORANGE_DIM = "rgba(255,107,0,0.12)";
-const RED = "#E05252";
-const RED_DIM = "rgba(220,53,53,0.08)";
-const BG = "#121212";
-const CARD = "#252525";
-const TEXT = "#F0F0F0";
-const MUTED = "#888888";
-const BORDER = "rgba(255,255,255,0.07)";
-const RADIUS = 14;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BG,
+    backgroundColor: "#121212",
   },
   content: {
     paddingVertical: 24,
@@ -214,7 +203,7 @@ const styles = StyleSheet.create({
     width: 62,
     height: 62,
     borderRadius: 31,
-    backgroundColor: ORANGE,
+    backgroundColor: "#FF6B00",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -229,7 +218,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 18,
     fontWeight: "600",
-    color: TEXT,
+    color: "#F0F0F0",
     marginBottom: 2,
   },
   userEmail: {
@@ -239,7 +228,7 @@ const styles = StyleSheet.create({
   },
   badge: {
     alignSelf: "flex-start",
-    backgroundColor: ORANGE_DIM,
+    backgroundColor: "rgba(255,107,0,0.12)",
     borderRadius: 20,
     paddingHorizontal: 8,
     paddingVertical: 3,
@@ -247,7 +236,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 11,
     fontWeight: "500",
-    color: ORANGE,
+    color: "#FF6B00",
   },
   statsRow: {
     flexDirection: "row",
@@ -257,38 +246,38 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: CARD,
-    borderRadius: RADIUS,
+    backgroundColor: "#252525",
+    borderRadius: 14,
     borderWidth: 0.5,
-    borderColor: BORDER,
+    borderColor: "rgba(255,255,255,0.07)",
     paddingVertical: 12,
     alignItems: "center",
   },
   statNum: {
     fontSize: 20,
     fontWeight: "600",
-    color: ORANGE,
+    color: "#FF6B00",
   },
   statLabel: {
     fontSize: 10,
-    color: MUTED,
+    color: "#888888",
     marginTop: 2,
   },
   sectionTitle: {
     fontSize: 11,
     fontWeight: "500",
-    color: MUTED,
+    color: "#888888",
     letterSpacing: 1,
     paddingHorizontal: 20,
     marginBottom: 8,
   },
   menuGroup: {
-    backgroundColor: CARD,
+    backgroundColor: "#252525",
     marginHorizontal: 16,
     marginBottom: 16,
-    borderRadius: RADIUS,
+    borderRadius: 14,
     borderWidth: 0.5,
-    borderColor: BORDER,
+    borderColor: "rgba(255,255,255,0.07)",
     overflow: "hidden",
   },
   menuItem: {
@@ -306,14 +295,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   menuIconOrange: {
-    backgroundColor: ORANGE_DIM,
+    backgroundColor: "rgba(255,107,0,0.12)",
   },
   menuIconGray: {
     backgroundColor: "rgba(255,255,255,0.06)",
   },
   menuIconText: {
     fontSize: 16,
-    color: ORANGE,
+    color: "#FF6B00",
   },
   menuText: {
     flex: 1,
@@ -325,26 +314,26 @@ const styles = StyleSheet.create({
   },
   menuSub: {
     fontSize: 12,
-    color: MUTED,
+    color: "#888888",
     marginTop: 1,
   },
   chevron: {
     fontSize: 20,
-    color: MUTED,
+    color: "#888888",
   },
   divider: {
     height: 0.5,
-    backgroundColor: BORDER,
+    backgroundColor: "rgba(255,255,255,0.07)",
     marginHorizontal: 16,
   },
   logoutGroup: {
     flexDirection: "row",
     alignItems: "center",
     gap: 14,
-    backgroundColor: RED_DIM,
+    backgroundColor: "rgba(220,53,53,0.08)",
     marginHorizontal: 16,
     marginBottom: 24,
-    borderRadius: RADIUS,
+    borderRadius: 14,
     borderWidth: 0.5,
     borderColor: "rgba(220,53,53,0.15)",
     paddingVertical: 14,
@@ -360,12 +349,12 @@ const styles = StyleSheet.create({
   },
   logoutIconText: {
     fontSize: 18,
-    color: RED,
+    color: "#E05252",
   },
   logoutLabel: {
     fontSize: 14,
     fontWeight: "500",
-    color: RED,
+    color: "#E05252",
   },
   deleteBtn: {
     flexDirection: "row",

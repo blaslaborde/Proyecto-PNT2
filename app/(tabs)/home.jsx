@@ -46,9 +46,10 @@ export default function home() {
             },
           }
         );
-        if (!response.ok) throw new Error("Nominatim bloqueó o falló la respuesta");
+        if (!response.ok) throw new Error("Nominatim falló en la respuesta");
         const data = await response.json();
-        setBarrio(data.address.suburb || data.address.neighbourhood); 
+        console.log(data)
+        setBarrio(data.address.suburb); 
       } catch (error) {
         console.log("Error al obtener la ubicación:", error);
       }
